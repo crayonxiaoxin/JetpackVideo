@@ -1,0 +1,16 @@
+plugins {
+    id 'java-library'
+}
+
+dependencies {
+    implementation project(":libnavannotation")
+    implementation 'com.alibaba:fastjson:1.2.76'
+    // auto-service与gradle不兼容问题 https://blog.csdn.net/qq_39969226/article/details/104538438
+    annotationProcessor 'com.google.auto.service:auto-service:1.0.1'
+    api 'com.google.auto.service:auto-service:1.0.1'
+}
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_1_8
+    targetCompatibility = JavaVersion.VERSION_1_8
+}
