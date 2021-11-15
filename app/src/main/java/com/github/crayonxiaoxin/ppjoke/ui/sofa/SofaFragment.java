@@ -1,6 +1,7 @@
 package com.github.crayonxiaoxin.ppjoke.ui.sofa;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,8 +21,8 @@ public class SofaFragment extends Fragment {
 
     private FragmentSofaBinding binding;
 
-    public View onCreateView(@NonNull LayoutInflater inflater,
-                             ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        Log.e("SofaFragment", "onCreateView: ");
 
         binding = FragmentSofaBinding.inflate(inflater, container, false);
         View root = binding.getRoot();

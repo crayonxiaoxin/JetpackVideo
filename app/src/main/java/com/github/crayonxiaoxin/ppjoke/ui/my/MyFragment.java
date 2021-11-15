@@ -1,6 +1,7 @@
 package com.github.crayonxiaoxin.ppjoke.ui.my;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,7 +12,6 @@ import androidx.fragment.app.Fragment;
 
 import com.github.crayonxiaoxin.libnavannotation.FragmentDestination;
 import com.github.crayonxiaoxin.ppjoke.databinding.FragmentMyBinding;
-import com.github.crayonxiaoxin.ppjoke.databinding.FragmentPublishBinding;
 
 @FragmentDestination(pageUrl = "main/tabs/my")
 public class MyFragment extends Fragment {
@@ -20,6 +20,8 @@ public class MyFragment extends Fragment {
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
+
+        Log.e("MyFragment", "onCreateView: ");
 
         binding = FragmentMyBinding.inflate(inflater, container, false);
         View root = binding.getRoot();

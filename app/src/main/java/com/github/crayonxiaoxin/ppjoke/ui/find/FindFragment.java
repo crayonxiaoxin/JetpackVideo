@@ -1,6 +1,7 @@
 package com.github.crayonxiaoxin.ppjoke.ui.find;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,6 +21,7 @@ public class FindFragment extends Fragment {
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
+        Log.e("FindFragment", "onCreateView: ");
 
         binding = FragmentFindBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
