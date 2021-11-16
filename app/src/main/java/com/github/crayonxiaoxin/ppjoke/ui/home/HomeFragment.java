@@ -15,13 +15,11 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.github.crayonxiaoxin.libnavannotation.FragmentDestination;
 import com.github.crayonxiaoxin.ppjoke.R;
-import com.github.crayonxiaoxin.ppjoke.databinding.FragmentHomeBinding;
 
 @FragmentDestination(pageUrl = "main/tabs/home", asStarter = true)
 public class HomeFragment extends Fragment {
 
     private HomeViewModel homeViewModel;
-    private FragmentHomeBinding binding;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -30,22 +28,21 @@ public class HomeFragment extends Fragment {
         homeViewModel =
                 new ViewModelProvider(this).get(HomeViewModel.class);
 
-        binding = FragmentHomeBinding.inflate(inflater, container, false);
-        View root = binding.getRoot();
+        View view = inflater.inflate(R.layout.fragment_home, container, false);
 
-        final TextView textView = binding.textHome;
+
+        final TextView textView = view.findViewById(R.id.text_home);
         homeViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
             @Override
             public void onChanged(@Nullable String s) {
                 textView.setText(s);
             }
         });
-        return root;
+        return view;
     }
 
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        binding = null;
     }
 }

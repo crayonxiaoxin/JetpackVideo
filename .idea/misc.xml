@@ -11,6 +11,13 @@
         <entry key="app/src/main/res/layout/fragment_notifications.xml" value="0.13858695652173914" />
         <entry key="app/src/main/res/layout/fragment_publish.xml" value="0.15896739130434784" />
         <entry key="app/src/main/res/layout/fragment_sofa.xml" value="0.15896739130434784" />
+        <entry key="app/src/main/res/layout/layout.xml" value="0.1644021739130435" />
+        <entry key="app/src/main/res/layout/layout_feed_author.xml" value="0.18" />
+        <entry key="app/src/main/res/layout/layout_feed_interaction.xml" value="0.1793478260869565" />
+        <entry key="app/src/main/res/layout/layout_feed_tag.xml" value="0.5" />
+        <entry key="app/src/main/res/layout/layout_feed_text.xml" value="0.1793478260869565" />
+        <entry key="app/src/main/res/layout/layout_feed_top_comment.xml" value="0.1793478260869565" />
+        <entry key="app/src/main/res/layout/layout_feed_type_image.xml" value="0.25" />
         <entry key="app/src/main/res/menu/bottom_nav_menu.xml" value="0.16197916666666667" />
       </map>
     </option>

@@ -11,29 +11,22 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
 import com.github.crayonxiaoxin.libnavannotation.FragmentDestination;
-import com.github.crayonxiaoxin.ppjoke.databinding.FragmentFindBinding;
-import com.github.crayonxiaoxin.ppjoke.databinding.FragmentMyBinding;
+import com.github.crayonxiaoxin.ppjoke.R;
 
 @FragmentDestination(pageUrl = "main/tabs/find")
 public class FindFragment extends Fragment {
-
-    private FragmentFindBinding binding;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         Log.e("FindFragment", "onCreateView: ");
 
-        binding = FragmentFindBinding.inflate(inflater, container, false);
-        View root = binding.getRoot();
+        View view = inflater.inflate(R.layout.fragment_find, container, false);
 
-        final TextView textView = binding.textNotifications;
-
-        return root;
+        return view;
     }
 
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        binding = null;
     }
 }

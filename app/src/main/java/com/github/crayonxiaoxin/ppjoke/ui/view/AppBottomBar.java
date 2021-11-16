@@ -6,7 +6,6 @@ import android.graphics.Color;
 import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.MenuItem;
-import android.view.View;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;

@@ -12,6 +12,8 @@ import com.github.crayonxiaoxin.libnetwork.cache.CacheManager;
 
 import java.io.IOException;
 import java.io.Serializable;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.HashMap;
@@ -39,6 +41,7 @@ public abstract class Request<T, R> implements Cloneable {
     private Class mClazz;
     private int mCacheStrategy;
 
+    @Retention(RetentionPolicy.SOURCE)
     @IntDef({CACHE_ONLY, CACHE_FIRST, NET_ONLY, NET_CACHE})
     public @interface CacheStrategy {
     }

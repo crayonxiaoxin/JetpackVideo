@@ -4,37 +4,29 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.MenuItem;
 
-import com.github.crayonxiaoxin.libnetwork.ApiResponse;
-import com.github.crayonxiaoxin.libnetwork.GetRequest;
-import com.github.crayonxiaoxin.libnetwork.JsonCallback;
-import com.github.crayonxiaoxin.libnetwork.PostRequest;
-import com.github.crayonxiaoxin.ppjoke.utils.NavGraphBuilder;
-import com.google.android.material.bottomnavigation.BottomNavigationView;
-
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
 import androidx.navigation.fragment.NavHostFragment;
-import androidx.navigation.ui.AppBarConfiguration;
-import androidx.navigation.ui.NavigationUI;
 
-import com.github.crayonxiaoxin.ppjoke.databinding.ActivityMainBinding;
+import com.github.crayonxiaoxin.libnetwork.ApiResponse;
+import com.github.crayonxiaoxin.libnetwork.GetRequest;
+import com.github.crayonxiaoxin.libnetwork.JsonCallback;
+import com.github.crayonxiaoxin.ppjoke.utils.NavGraphBuilder;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import org.json.JSONObject;
 
 public class MainActivity extends AppCompatActivity implements BottomNavigationView.OnNavigationItemSelectedListener {
 
-    private ActivityMainBinding binding;
     private NavController navController;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        binding = ActivityMainBinding.inflate(getLayoutInflater());
-        setContentView(binding.getRoot());
+        setContentView(R.layout.activity_main);
 
         BottomNavigationView navView = findViewById(R.id.nav_view);
 

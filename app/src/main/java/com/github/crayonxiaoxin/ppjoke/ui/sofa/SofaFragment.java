@@ -5,36 +5,27 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProvider;
 
 import com.github.crayonxiaoxin.libnavannotation.FragmentDestination;
-import com.github.crayonxiaoxin.ppjoke.databinding.FragmentSofaBinding;
+import com.github.crayonxiaoxin.ppjoke.R;
 
 @FragmentDestination(pageUrl = "main/tabs/sofa")
 public class SofaFragment extends Fragment {
 
-    private FragmentSofaBinding binding;
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         Log.e("SofaFragment", "onCreateView: ");
 
-        binding = FragmentSofaBinding.inflate(inflater, container, false);
-        View root = binding.getRoot();
+        View view = inflater.inflate(R.layout.fragment_sofa, container, false);
 
-        final TextView textView = binding.textDashboard;
-
-        return root;
+        return view;
     }
 
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        binding = null;
     }
 }
