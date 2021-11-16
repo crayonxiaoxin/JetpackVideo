@@ -15,7 +15,6 @@ import com.github.crayonxiaoxin.ppjoke.R;
 import com.github.crayonxiaoxin.ppjoke.model.BottomBar;
 import com.github.crayonxiaoxin.ppjoke.model.Destination;
 import com.github.crayonxiaoxin.ppjoke.utils.AppConfig;
-import com.github.crayonxiaoxin.ppjoke.utils.AppGlobals;
 import com.google.android.material.bottomnavigation.BottomNavigationItemView;
 import com.google.android.material.bottomnavigation.BottomNavigationMenuView;
 import com.google.android.material.bottomnavigation.BottomNavigationView;

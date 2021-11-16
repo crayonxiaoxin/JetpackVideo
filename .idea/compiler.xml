@@ -21,6 +21,8 @@
     </annotationProcessing>
     <bytecodeTargetLevel target="1.8">
       <module name="ppjoke.app" target="11" />
+      <module name="ppjoke.libcommon" target="11" />
+      <module name="ppjoke.libnetwork" target="11" />
     </bytecodeTargetLevel>
   </component>
 </project>

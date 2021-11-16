@@ -3,8 +3,8 @@ package com.github.crayonxiaoxin.ppjoke.utils;
 import android.content.res.AssetManager;
 
 import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.TypeReference;
+import com.github.crayonxiaoxin.libcommon.AppGlobals;
 import com.github.crayonxiaoxin.ppjoke.model.BottomBar;
 import com.github.crayonxiaoxin.ppjoke.model.Destination;
 

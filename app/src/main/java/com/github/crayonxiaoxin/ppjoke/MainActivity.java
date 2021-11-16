@@ -4,6 +4,10 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.MenuItem;
 
+import com.github.crayonxiaoxin.libnetwork.ApiResponse;
+import com.github.crayonxiaoxin.libnetwork.GetRequest;
+import com.github.crayonxiaoxin.libnetwork.JsonCallback;
+import com.github.crayonxiaoxin.libnetwork.PostRequest;
 import com.github.crayonxiaoxin.ppjoke.utils.NavGraphBuilder;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
@@ -17,6 +21,8 @@ import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
 import com.github.crayonxiaoxin.ppjoke.databinding.ActivityMainBinding;
+
+import org.json.JSONObject;
 
 public class MainActivity extends AppCompatActivity implements BottomNavigationView.OnNavigationItemSelectedListener {
 
@@ -39,6 +45,16 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
         NavGraphBuilder.build(navController, this, fragment.getId());
 
         navView.setOnNavigationItemSelectedListener(this);
+
+        GetRequest<JSONObject> request = new GetRequest<>("www.imooc.com");
+        request.execute();
+
+        request.execute(new JsonCallback<JSONObject>() {
+            @Override
+            public void onSuccess(ApiResponse<JSONObject> response) {
+                super.onSuccess(response);
+            }
+        });
     }
 
     @Override

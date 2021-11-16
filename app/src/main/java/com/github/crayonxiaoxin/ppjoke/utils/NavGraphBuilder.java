@@ -1,6 +1,5 @@
 package com.github.crayonxiaoxin.ppjoke.utils;
 
-import android.app.Activity;
 import android.content.ComponentName;
 
 import androidx.fragment.app.FragmentActivity;
@@ -8,10 +7,10 @@ import androidx.navigation.ActivityNavigator;
 import androidx.navigation.NavController;
 import androidx.navigation.NavGraph;
 import androidx.navigation.NavGraphNavigator;
-import androidx.navigation.NavHostController;
 import androidx.navigation.NavigatorProvider;
 import androidx.navigation.fragment.FragmentNavigator;
 
+import com.github.crayonxiaoxin.libcommon.AppGlobals;
 import com.github.crayonxiaoxin.ppjoke.FixFragmentNavigator;
 import com.github.crayonxiaoxin.ppjoke.model.Destination;
 

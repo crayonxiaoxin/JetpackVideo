@@ -1,4 +1,4 @@
-package com.github.crayonxiaoxin.ppjoke.utils;
+package com.github.crayonxiaoxin.libcommon;
 
 import android.app.Application;
 
