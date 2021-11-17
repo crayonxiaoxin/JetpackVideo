@@ -23,7 +23,7 @@ import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Response;
 
-public abstract class Request<T, R> implements Cloneable {
+public abstract class Request<T, R extends Request> implements Cloneable {
     protected String mUrl;
     protected HashMap<String, String> headers = new HashMap<>();
     protected HashMap<String, Object> params = new HashMap<>();
@@ -206,5 +206,9 @@ public abstract class Request<T, R> implements Cloneable {
         }
     }
 
-
+    @NonNull
+    @Override
+    public Request clone() throws CloneNotSupportedException {
+        return (Request<T, R>) super.clone();
+    }
 }

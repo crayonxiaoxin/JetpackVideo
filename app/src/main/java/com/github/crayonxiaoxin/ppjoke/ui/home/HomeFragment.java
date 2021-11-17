@@ -12,37 +12,36 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.paging.PagedListAdapter;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.github.crayonxiaoxin.libnavannotation.FragmentDestination;
 import com.github.crayonxiaoxin.ppjoke.R;
+import com.github.crayonxiaoxin.ppjoke.model.Feed;
+import com.github.crayonxiaoxin.ppjoke.ui.AbsListFragment;
+import com.scwang.smart.refresh.layout.api.RefreshLayout;
 
 @FragmentDestination(pageUrl = "main/tabs/home", asStarter = true)
-public class HomeFragment extends Fragment {
+public class HomeFragment extends AbsListFragment<Feed,HomeViewModel> {
 
-    private HomeViewModel homeViewModel;
+    @Override
+    protected void afterCreateView() {
 
-    public View onCreateView(@NonNull LayoutInflater inflater,
-                             ViewGroup container, Bundle savedInstanceState) {
-        Log.e("HomeFragment", "onCreateView: ");
-
-        homeViewModel =
-                new ViewModelProvider(this).get(HomeViewModel.class);
-
-        View view = inflater.inflate(R.layout.fragment_home, container, false);
-
-
-        final TextView textView = view.findViewById(R.id.text_home);
-        homeViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
-            @Override
-            public void onChanged(@Nullable String s) {
-                textView.setText(s);
-            }
-        });
-        return view;
     }
 
     @Override
-    public void onDestroyView() {
-        super.onDestroyView();
+    public PagedListAdapter getAdapter() {
+        String feedType = getArguments()==null?"all":getArguments().getString("feedType");
+        return new FeedAdapter(getContext(),feedType);
+    }
+
+    @Override
+    public void onLoadMore(@NonNull RefreshLayout refreshLayout) {
+
+    }
+
+    @Override
+    public void onRefresh(@NonNull RefreshLayout refreshLayout) {
+
     }
 }

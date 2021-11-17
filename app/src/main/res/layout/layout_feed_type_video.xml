@@ -26,12 +26,12 @@
             layout="@layout/layout_feed_text"
             app:feedText="@{feed.feedsText}" />
 
-        <!--   图片区域     -->
-        <com.github.crayonxiaoxin.ppjoke.ui.view.PPImageView
-            android:id="@+id/feed_image"
+        <!--   视频区域     -->
+        <com.github.crayonxiaoxin.ppjoke.ui.view.ListPlayerView
+            android:id="@+id/list_player_view"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            tools:src="@mipmap/ic_launcher_round" />
+            android:layout_marginBottom="@dimen/dp_10" />
 
         <include
             layout="@layout/layout_feed_tag"

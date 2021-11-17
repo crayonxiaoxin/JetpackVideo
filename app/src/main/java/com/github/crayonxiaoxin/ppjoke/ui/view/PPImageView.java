@@ -13,6 +13,14 @@ import androidx.databinding.BindingAdapter;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestBuilder;
 import com.bumptech.glide.load.resource.bitmap.CircleCrop;
+import com.bumptech.glide.request.Request;
+import com.bumptech.glide.request.target.SimpleTarget;
+import com.bumptech.glide.request.target.SizeReadyCallback;
+import com.bumptech.glide.request.target.Target;
+import com.bumptech.glide.request.transition.Transition;
+import com.github.crayonxiaoxin.libcommon.PixUtils;
+
+import jp.wasabeef.glide.transformations.BlurTransformation;
 
 public class PPImageView extends AppCompatImageView {
     public PPImageView(@NonNull Context context) {
@@ -27,7 +35,7 @@ public class PPImageView extends AppCompatImageView {
         super(context, attrs, defStyleAttr);
     }
 
-    @BindingAdapter(value = {"image_url", "isCircle"},requireAll = false)
+    @BindingAdapter(value = {"image_url", "isCircle"}, requireAll = false)
     public static void setImageUrl(PPImageView view, String imageUrl, boolean isCircle) {
         RequestBuilder<Drawable> builder = Glide.with(view).load(imageUrl);
         if (isCircle) {
@@ -38,5 +46,52 @@ public class PPImageView extends AppCompatImageView {
             builder.override(layoutParams.width, layoutParams.height);
         }
         builder.into(view);
+    }
+
+    public void bindData(int widthPx, int heightPx, int marginLeft, String imageUrl) {
+        bindData(widthPx, heightPx, marginLeft, PixUtils.getScreenWidth(), PixUtils.getScreenWidth(), imageUrl);
+    }
+
+    public void bindData(int widthPx, int heightPx, int marginLeft, int maxWidthPx, int maxHeightPx, String imageUrl) {
+        if (widthPx <= 0 || heightPx <= 0) {
+            Glide.with(this).load(imageUrl).into(new SimpleTarget<Drawable>() {
+                @Override
+                public void onResourceReady(@NonNull Drawable resource, @Nullable Transition<? super Drawable> transition) {
+                    int width = resource.getIntrinsicWidth();
+                    int height = resource.getIntrinsicHeight();
+                    setSize(width, height, marginLeft, maxWidthPx, maxHeightPx);
+                    setImageDrawable(resource);
+                }
+            });
+            return;
+        }
+        setSize(widthPx, heightPx, marginLeft, maxWidthPx, maxHeightPx);
+        setImageUrl(this, imageUrl, false);
+    }
+
+    protected void setSize(int width, int height, int marginLeft, int maxWidthPx, int maxHeightPx) {
+        int finalWidth, finalHeight;
+        if (width > height) {
+            finalWidth = maxWidthPx;
+            finalHeight = (int) (height / (width * 1.0f / finalWidth));
+        } else {
+            finalHeight = maxHeightPx;
+            finalWidth = (int) (width / (height * 1.0f / finalHeight));
+        }
+        ViewGroup.MarginLayoutParams marginLayoutParams = new ViewGroup.MarginLayoutParams(finalWidth, finalHeight);
+        marginLayoutParams.leftMargin = height > width ? PixUtils.dp2px(marginLeft) : 0;
+        setLayoutParams(marginLayoutParams);
+    }
+
+    public void setBlurImageUrl(String coverUrl, int radius) {
+        Glide.with(this).load(coverUrl).override(50)
+                .transform(new BlurTransformation(radius))
+                .dontAnimate()
+                .into(new SimpleTarget<Drawable>() {
+                    @Override
+                    public void onResourceReady(@NonNull Drawable resource, @Nullable Transition<? super Drawable> transition) {
+                        setBackground(resource); // 设置 background 是为了铺满
+                    }
+                });
     }
 }
