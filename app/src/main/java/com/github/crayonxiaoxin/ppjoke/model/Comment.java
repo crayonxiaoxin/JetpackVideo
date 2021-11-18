@@ -18,7 +18,7 @@ public class Comment implements Serializable {
     public Integer width;
     public Integer height;
     public Boolean hasLiked;
-    public Author author;
+    public User author;
     public Ugc ugc;
 
     @Override

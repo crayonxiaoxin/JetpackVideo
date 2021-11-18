@@ -18,6 +18,7 @@
         android:layout_marginHorizontal="@dimen/dp_16"
         android:ellipsize="end"
         android:maxLines="3"
+        android:paddingVertical="@dimen/dp_10"
         android:text="@{feedText}"
         android:textColor="@color/color_2f2"
         android:textSize="@dimen/sp_16"

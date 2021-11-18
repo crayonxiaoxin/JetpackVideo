@@ -12,7 +12,7 @@ import androidx.fragment.app.Fragment;
 import com.github.crayonxiaoxin.libnavannotation.FragmentDestination;
 import com.github.crayonxiaoxin.ppjoke.R;
 
-@FragmentDestination(pageUrl = "main/tabs/my")
+@FragmentDestination(pageUrl = "main/tabs/my", needLogin = true)
 public class MyFragment extends Fragment {
 
 

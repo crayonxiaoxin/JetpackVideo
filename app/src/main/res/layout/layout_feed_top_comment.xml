@@ -26,7 +26,8 @@
         android:layout_height="wrap_content"
         android:background="@color/color_f4f"
         android:paddingHorizontal="@dimen/dp_16"
-        android:paddingVertical="@dimen/dp_10">
+        android:paddingVertical="@dimen/dp_10"
+        android:visibility="@{comment==null?View.GONE:View.VISIBLE}">
 
         <ImageView
             android:layout_width="wrap_content"

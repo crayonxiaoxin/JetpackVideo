@@ -90,7 +90,7 @@ public abstract class Request<T, R extends Request> implements Cloneable {
                 @Override
                 public void run() {
                     ApiResponse<T> response = readCache();
-                    if (callback != null && response != null) {
+                    if (callback != null && response != null && response.body != null) {
                         Log.e("TAG", "run: " + response.status);
                         callback.cacheSuccess(response);
                     }
@@ -178,7 +178,7 @@ public abstract class Request<T, R extends Request> implements Cloneable {
         result.message = message;
         if (mCacheStrategy != NET_ONLY && result.success && result.body != null && result.body instanceof Serializable) {
             saveCache(result.body);
-            Log.e("TAG", "parseResponse: save" );
+            Log.e("TAG", "parseResponse: save");
         }
         return result;
     }

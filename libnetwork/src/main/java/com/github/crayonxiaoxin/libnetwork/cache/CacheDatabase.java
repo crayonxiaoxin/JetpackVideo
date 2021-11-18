@@ -15,7 +15,7 @@ public abstract class CacheDatabase extends RoomDatabase {
         // Room.inMemoryDatabaseBuilder()
         database = Room.databaseBuilder(AppGlobals.getApplication(), CacheDatabase.class, "ppjoke_cache")
                 // 是否允许在主线程查询，默认不允许
-                //.allowMainThreadQueries()
+                .allowMainThreadQueries()
                 // room 的日志模式
                 //.setJournalMode()
                 // 数据库升级异常后的回滚

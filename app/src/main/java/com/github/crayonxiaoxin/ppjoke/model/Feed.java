@@ -21,7 +21,7 @@ public class Feed implements Serializable {
     public Integer height;
     public String url;
     public String cover;
-    public Author author;
+    public User author;
     public Comment topComment;
     public Ugc ugc;
 

@@ -30,7 +30,7 @@ import java.lang.reflect.Type;
 
 public abstract class AbsListFragment<T, M extends AbsViewModal<T>> extends Fragment implements OnRefreshListener, OnLoadMoreListener {
     private LayoutRefreshViewBinding binding;
-    private PagedListAdapter<T, RecyclerView.ViewHolder> adapter;
+    protected PagedListAdapter<T, RecyclerView.ViewHolder> adapter;
     protected M mViewModel;
 
     @Nullable
@@ -51,7 +51,6 @@ public abstract class AbsListFragment<T, M extends AbsViewModal<T>> extends Frag
         decoration.setDrawable(ContextCompat.getDrawable(getContext(), R.drawable.list_divider));
         binding.recyclerView.addItemDecoration(decoration);
 
-        afterCreateView();
         return binding.getRoot();
     }
 
@@ -100,5 +99,6 @@ public abstract class AbsListFragment<T, M extends AbsViewModal<T>> extends Frag
                 }
             });
         }
+        afterCreateView();
     }
 }

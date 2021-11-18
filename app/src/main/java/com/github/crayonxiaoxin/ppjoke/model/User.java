@@ -3,7 +3,7 @@ package com.github.crayonxiaoxin.ppjoke.model;
 import java.io.Serializable;
 import java.util.Objects;
 
-public class Author implements Serializable {
+public class User implements Serializable {
     public Integer id;
     public Integer userId;
     public String name;
@@ -26,7 +26,7 @@ public class Author implements Serializable {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Author author = (Author) o;
+        User author = (User) o;
         return Objects.equals(id, author.id) && Objects.equals(userId, author.userId) && Objects.equals(name, author.name) && Objects.equals(avatar, author.avatar) && Objects.equals(description, author.description) && Objects.equals(likeCount, author.likeCount) && Objects.equals(topCommentCount, author.topCommentCount) && Objects.equals(followCount, author.followCount) && Objects.equals(followerCount, author.followerCount) && Objects.equals(qqOpenId, author.qqOpenId) && Objects.equals(expiresTime, author.expiresTime) && Objects.equals(score, author.score) && Objects.equals(historyCount, author.historyCount) && Objects.equals(commentCount, author.commentCount) && Objects.equals(favoriteCount, author.favoriteCount) && Objects.equals(feedCount, author.feedCount) && Objects.equals(hasFollow, author.hasFollow);
     }
 

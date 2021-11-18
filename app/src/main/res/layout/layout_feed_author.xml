@@ -7,9 +7,9 @@
 
         <variable
             name="user"
-            type="Author" />
+            type="com.github.crayonxiaoxin.ppjoke.model.User" />
 
-        <import type="com.github.crayonxiaoxin.ppjoke.model.Author" />
+        <import type="com.github.crayonxiaoxin.ppjoke.model.User" />
     </data>
 
     <LinearLayout
