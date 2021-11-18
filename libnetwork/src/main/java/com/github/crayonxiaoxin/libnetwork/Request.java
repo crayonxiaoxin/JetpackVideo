@@ -56,6 +56,7 @@ public abstract class Request<T, R extends Request> implements Cloneable {
     }
 
     public R addParam(String key, Object value) {
+        if (value == null) value = "";
         params.put(key, value);
         return (R) this;
     }
@@ -89,7 +90,8 @@ public abstract class Request<T, R extends Request> implements Cloneable {
                 @Override
                 public void run() {
                     ApiResponse<T> response = readCache();
-                    if (callback != null) {
+                    if (callback != null && response != null) {
+                        Log.e("TAG", "run: " + response.status);
                         callback.cacheSuccess(response);
                     }
                 }
@@ -133,7 +135,7 @@ public abstract class Request<T, R extends Request> implements Cloneable {
 
     private ApiResponse<T> readCache() {
         String key = TextUtils.isEmpty(cacheKey) ? generateCacheKey() : cacheKey;
-        Object cache = CacheManager.getCache(cacheKey);
+        Object cache = CacheManager.getCache(key);
         ApiResponse<T> result = new ApiResponse<>();
         result.status = 304;
         result.body = (T) cache;
@@ -176,6 +178,7 @@ public abstract class Request<T, R extends Request> implements Cloneable {
         result.message = message;
         if (mCacheStrategy != NET_ONLY && result.success && result.body != null && result.body instanceof Serializable) {
             saveCache(result.body);
+            Log.e("TAG", "parseResponse: save" );
         }
         return result;
     }

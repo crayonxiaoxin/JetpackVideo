@@ -22,7 +22,7 @@ import com.github.crayonxiaoxin.ppjoke.ui.AbsListFragment;
 import com.scwang.smart.refresh.layout.api.RefreshLayout;
 
 @FragmentDestination(pageUrl = "main/tabs/home", asStarter = true)
-public class HomeFragment extends AbsListFragment<Feed,HomeViewModel> {
+public class HomeFragment extends AbsListFragment<Feed, HomeViewModel> {
 
     @Override
     protected void afterCreateView() {
@@ -31,8 +31,8 @@ public class HomeFragment extends AbsListFragment<Feed,HomeViewModel> {
 
     @Override
     public PagedListAdapter getAdapter() {
-        String feedType = getArguments()==null?"all":getArguments().getString("feedType");
-        return new FeedAdapter(getContext(),feedType);
+        String feedType = getArguments() == null ? "all" : getArguments().getString("feedType");
+        return new FeedAdapter(getContext(), feedType);
     }
 
     @Override

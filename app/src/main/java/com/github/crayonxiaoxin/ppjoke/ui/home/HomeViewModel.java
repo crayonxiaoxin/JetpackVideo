@@ -24,7 +24,7 @@ public class HomeViewModel extends AbsViewModal<Feed> {
 
     @Override
     public DataSource createDataSource() {
-        return null;
+        return mDataSource;
     }
 
     ItemKeyedDataSource<Integer, Feed> mDataSource = new ItemKeyedDataSource<Integer, Feed>() {
@@ -60,14 +60,14 @@ public class HomeViewModel extends AbsViewModal<Feed> {
                 }.getType())
                 .addParam("feedType", null)
                 .addParam("userId", 0)
-                .addParam("feedId", 0)
+                .addParam("feedId", key)
                 .addParam("pageCount", 10);
         if (withCache) {
             request.cacheStrategy(Request.CACHE_ONLY);
             request.execute(new JsonCallback<List<Feed>>() {
                 @Override
                 public void cacheSuccess(ApiResponse<List<Feed>> response) {
-                    Log.e("TAG", "cacheSuccess: " + response.body.size());
+                    Log.e("TAG", "cacheSuccess: " + response.body);
                 }
             });
         }

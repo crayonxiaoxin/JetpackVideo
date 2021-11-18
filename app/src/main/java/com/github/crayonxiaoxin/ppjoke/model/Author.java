@@ -1,8 +1,9 @@
 package com.github.crayonxiaoxin.ppjoke.model;
 
+import java.io.Serializable;
 import java.util.Objects;
 
-public class Author {
+public class Author implements Serializable {
     public Integer id;
     public Integer userId;
     public String name;

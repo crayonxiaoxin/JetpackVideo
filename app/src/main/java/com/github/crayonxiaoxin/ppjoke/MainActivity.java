@@ -38,15 +38,15 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
 
         navView.setOnNavigationItemSelectedListener(this);
 
-        GetRequest<JSONObject> request = new GetRequest<>("www.imooc.com");
-        request.execute();
-
-        request.execute(new JsonCallback<JSONObject>() {
-            @Override
-            public void onSuccess(ApiResponse<JSONObject> response) {
-                super.onSuccess(response);
-            }
-        });
+//        GetRequest<JSONObject> request = new GetRequest<>("http://www.imooc.com");
+//        request.execute();
+//
+//        request.execute(new JsonCallback<JSONObject>() {
+//            @Override
+//            public void onSuccess(ApiResponse<JSONObject> response) {
+//                super.onSuccess(response);
+//            }
+//        });
     }
 
     @Override

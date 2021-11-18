@@ -1,9 +1,10 @@
 package com.github.crayonxiaoxin.ppjoke.model;
 
 
+import java.io.Serializable;
 import java.util.Objects;
 
-public class Ugc {
+public class Ugc implements Serializable {
     public Integer likeCount;
     public Integer shareCount;
     public Integer commentCount;

@@ -90,7 +90,7 @@ public abstract class AbsListFragment<T, M extends AbsViewModal<T>> extends Frag
             mViewModel.getPageData().observe(getViewLifecycleOwner(), new Observer<PagedList<T>>() {
                 @Override
                 public void onChanged(PagedList<T> pagedList) {
-                    adapter.submitList(pagedList);
+                    submitList(pagedList);
                 }
             });
             mViewModel.getBoundaryPageData().observe(getViewLifecycleOwner(), new Observer<Boolean>() {
