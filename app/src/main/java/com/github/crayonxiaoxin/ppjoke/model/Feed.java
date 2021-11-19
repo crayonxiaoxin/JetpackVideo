@@ -30,6 +30,7 @@ public class Feed extends BaseObservable implements Serializable {
 
     @Bindable
     public Ugc getUgc() {
+        if (ugc == null) ugc = new Ugc();
         return ugc;
     }
 

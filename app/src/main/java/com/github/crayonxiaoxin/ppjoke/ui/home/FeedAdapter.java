@@ -1,6 +1,7 @@
 package com.github.crayonxiaoxin.ppjoke.ui.home;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +13,7 @@ import androidx.paging.PagedListAdapter;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.github.crayonxiaoxin.ppjoke.BR;
 import com.github.crayonxiaoxin.ppjoke.databinding.LayoutFeedTypeImageBinding;
 import com.github.crayonxiaoxin.ppjoke.databinding.LayoutFeedTypeVideoBinding;
 import com.github.crayonxiaoxin.ppjoke.model.Feed;
@@ -71,16 +73,18 @@ class FeedAdapter extends PagedListAdapter<Feed, FeedAdapter.ViewHolder> {
         }
 
         public void bindData(Feed item) {
+            mBinding.setVariable(BR.feed, item);
+            mBinding.setVariable(BR.lifeCycleOwner, mContext);
             if (mBinding instanceof LayoutFeedTypeImageBinding) {
                 LayoutFeedTypeImageBinding imageBinding = (LayoutFeedTypeImageBinding) mBinding;
-                imageBinding.setFeed(item);
+//                imageBinding.setFeed(item);
                 imageBinding.feedImage.bindData(item.width, item.height, 16, item.cover);
-                imageBinding.setLifecycleOwner((LifecycleOwner) mContext);
+//                imageBinding.setLifecycleOwner((LifecycleOwner) mContext); // include 中的 variable 不传递
             } else {
                 LayoutFeedTypeVideoBinding videoBinding = (LayoutFeedTypeVideoBinding) mBinding;
-                videoBinding.setFeed(item);
+//                videoBinding.setFeed(item);
                 videoBinding.listPlayerView.bindData(mCategory, item.width, item.height, item.cover, item.url);
-                videoBinding.setLifecycleOwner((LifecycleOwner) mContext);
+//                videoBinding.setLifecycleOwner((LifecycleOwner) mContext);
             }
         }
     }

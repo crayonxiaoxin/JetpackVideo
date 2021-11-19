@@ -1,9 +1,12 @@
 package com.github.crayonxiaoxin.ppjoke.model;
 
+import androidx.databinding.BaseObservable;
+import androidx.databinding.Bindable;
+
 import java.io.Serializable;
 import java.util.Objects;
 
-public class Comment implements Serializable {
+public class Comment extends BaseObservable implements Serializable {
     public Integer id;
     public Integer itemId;
     public Long commentId;
@@ -20,6 +23,12 @@ public class Comment implements Serializable {
     public Boolean hasLiked;
     public User author;
     public Ugc ugc;
+
+    @Bindable
+    public Ugc getUgc() {
+        if (ugc == null) ugc = new Ugc();
+        return ugc;
+    }
 
     @Override
     public boolean equals(Object o) {
