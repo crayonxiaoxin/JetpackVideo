@@ -2,9 +2,7 @@ package com.github.crayonxiaoxin.ppjoke;
 
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.MenuItem;
-import android.view.View;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -14,9 +12,6 @@ import androidx.navigation.NavController;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.navigation.ui.NavigationUI;
 
-import com.github.crayonxiaoxin.libnetwork.ApiResponse;
-import com.github.crayonxiaoxin.libnetwork.GetRequest;
-import com.github.crayonxiaoxin.libnetwork.JsonCallback;
 import com.github.crayonxiaoxin.ppjoke.model.Destination;
 import com.github.crayonxiaoxin.ppjoke.model.User;
 import com.github.crayonxiaoxin.ppjoke.ui.login.UserManager;
@@ -24,8 +19,6 @@ import com.github.crayonxiaoxin.ppjoke.ui.view.AppBottomBar;
 import com.github.crayonxiaoxin.ppjoke.utils.AppConfig;
 import com.github.crayonxiaoxin.ppjoke.utils.NavGraphBuilder;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-
-import org.json.JSONObject;
 
 import java.util.HashMap;
 import java.util.Iterator;
@@ -52,7 +45,9 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
 
         navView.setOnNavigationItemSelectedListener(this);
 
+
     }
+
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {

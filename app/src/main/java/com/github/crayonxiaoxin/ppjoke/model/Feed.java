@@ -1,9 +1,12 @@
 package com.github.crayonxiaoxin.ppjoke.model;
 
+import androidx.databinding.BaseObservable;
+import androidx.databinding.Bindable;
+
 import java.io.Serializable;
 import java.util.Objects;
 
-public class Feed implements Serializable {
+public class Feed extends BaseObservable implements Serializable {
 
     public static final int TYPE_IMAGE = 1;
     public static final int TYPE_VIDEO = 2;
@@ -24,6 +27,11 @@ public class Feed implements Serializable {
     public User author;
     public Comment topComment;
     public Ugc ugc;
+
+    @Bindable
+    public Ugc getUgc() {
+        return ugc;
+    }
 
     @Override
     public boolean equals(Object o) {

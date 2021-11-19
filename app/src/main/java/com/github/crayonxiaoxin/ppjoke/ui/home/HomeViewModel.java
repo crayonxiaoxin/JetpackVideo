@@ -18,6 +18,7 @@ import com.github.crayonxiaoxin.libnetwork.Request;
 import com.github.crayonxiaoxin.ppjoke.AbsViewModal;
 import com.github.crayonxiaoxin.ppjoke.model.Feed;
 import com.github.crayonxiaoxin.ppjoke.ui.MutableDataSource;
+import com.github.crayonxiaoxin.ppjoke.ui.login.UserManager;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -68,7 +69,7 @@ public class HomeViewModel extends AbsViewModal<Feed> {
                 .responseType(new TypeReference<ArrayList<Feed>>() {
                 }.getType())
                 .addParam("feedType", null)
-                .addParam("userId", 0)
+                .addParam("userId", UserManager.get().getUserId())
                 .addParam("feedId", key)
                 .addParam("pageCount", 10);
         if (withCache) {
