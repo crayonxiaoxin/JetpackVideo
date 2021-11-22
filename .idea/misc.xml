@@ -4,6 +4,8 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="../../../../layout/custom_preview.xml" value="0.221875" />
+        <entry key="../../.gradle/caches/transforms-3/1c87a1993ad5020daf55bfffa2fba516/transformed/jetified-exoplayer-ui-2.16.0/res/layout/exo_player_control_view.xml" value="0.196875" />
+        <entry key="../../.gradle/caches/transforms-3/1c87a1993ad5020daf55bfffa2fba516/transformed/jetified-exoplayer-ui-2.16.0/res/layout/exo_player_view.xml" value="0.196875" />
         <entry key="app/src/main/res/drawable/list_divider.xml" value="0.18802083333333333" />
         <entry key="app/src/main/res/layout/activity_layout_login.xml" value="0.10416666666666667" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.1" />
@@ -15,6 +17,8 @@
         <entry key="app/src/main/res/layout/fragment_publish.xml" value="0.15896739130434784" />
         <entry key="app/src/main/res/layout/fragment_sofa.xml" value="0.15896739130434784" />
         <entry key="app/src/main/res/layout/layout.xml" value="0.1644021739130435" />
+        <entry key="app/src/main/res/layout/layout_exo_player_controller_view.xml" value="0.196875" />
+        <entry key="app/src/main/res/layout/layout_exo_player_view.xml" value="0.196875" />
         <entry key="app/src/main/res/layout/layout_feed_author.xml" value="0.18" />
         <entry key="app/src/main/res/layout/layout_feed_interaction.xml" value="0.1" />
         <entry key="app/src/main/res/layout/layout_feed_tag.xml" value="0.5" />
@@ -25,6 +29,8 @@
         <entry key="app/src/main/res/layout/layout_player_view.xml" value="0.1743659420289855" />
         <entry key="app/src/main/res/layout/layout_refresh_view.xml" value="0.1743659420289855" />
         <entry key="app/src/main/res/layout/layout_share_item.xml" value="0.20260416666666667" />
+        <entry key="app/src/main/res/layout/layout_simple_exo_player_controller_view.xml" value="0.196875" />
+        <entry key="app/src/main/res/layout/layout_simple_exo_player_view.xml" value="0.196875" />
         <entry key="app/src/main/res/menu/bottom_nav_menu.xml" value="0.16197916666666667" />
         <entry key="libcommon/src/main/res/layout/layout_empty_view.xml" value="0.1743659420289855" />
         <entry key="libcommon/src/main/res/layout/layout_share_item.xml" value="0.20260416666666667" />

@@ -17,6 +17,7 @@ import com.github.crayonxiaoxin.ppjoke.BR;
 import com.github.crayonxiaoxin.ppjoke.databinding.LayoutFeedTypeImageBinding;
 import com.github.crayonxiaoxin.ppjoke.databinding.LayoutFeedTypeVideoBinding;
 import com.github.crayonxiaoxin.ppjoke.model.Feed;
+import com.github.crayonxiaoxin.ppjoke.ui.view.ListPlayerView;
 
 class FeedAdapter extends PagedListAdapter<Feed, FeedAdapter.ViewHolder> {
     private final LayoutInflater mInflater;
@@ -66,6 +67,7 @@ class FeedAdapter extends PagedListAdapter<Feed, FeedAdapter.ViewHolder> {
     public class ViewHolder extends RecyclerView.ViewHolder {
 
         private ViewDataBinding mBinding;
+        private ListPlayerView listPlayerView;
 
         public ViewHolder(@NonNull View itemView, ViewDataBinding binding) {
             super(itemView);
@@ -85,7 +87,16 @@ class FeedAdapter extends PagedListAdapter<Feed, FeedAdapter.ViewHolder> {
 //                videoBinding.setFeed(item);
                 videoBinding.listPlayerView.bindData(mCategory, item.width, item.height, item.cover, item.url);
 //                videoBinding.setLifecycleOwner((LifecycleOwner) mContext);
+                listPlayerView = videoBinding.listPlayerView;
             }
+        }
+
+        public boolean isVideoItem() {
+            return mBinding instanceof LayoutFeedTypeVideoBinding;
+        }
+
+        public ListPlayerView getListPlayerView() {
+            return listPlayerView;
         }
     }
 }

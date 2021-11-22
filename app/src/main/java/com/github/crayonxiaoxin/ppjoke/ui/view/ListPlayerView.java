@@ -1,11 +1,14 @@
 package com.github.crayonxiaoxin.ppjoke.ui.view;
 
 import android.content.Context;
+import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewParent;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
@@ -15,14 +18,24 @@ import androidx.annotation.Nullable;
 
 import com.github.crayonxiaoxin.libcommon.PixUtils;
 import com.github.crayonxiaoxin.ppjoke.R;
+import com.github.crayonxiaoxin.ppjoke.exoplayer.IPlayTarget;
+import com.github.crayonxiaoxin.ppjoke.exoplayer.PageListPlay;
+import com.github.crayonxiaoxin.ppjoke.exoplayer.PageListPlayManager;
+import com.google.android.exoplayer2.ExoPlayer;
+import com.google.android.exoplayer2.Player;
+import com.google.android.exoplayer2.PlayerMessage;
+import com.google.android.exoplayer2.source.MediaSource;
+import com.google.android.exoplayer2.ui.PlayerControlView;
+import com.google.android.exoplayer2.ui.PlayerView;
 
-public class ListPlayerView extends FrameLayout {
+public class ListPlayerView extends FrameLayout implements IPlayTarget, PlayerControlView.VisibilityListener, Player.Listener {
     private PPImageView blurView;
     private PPImageView cover;
     private ImageView playBtn;
     private ProgressBar bufferView;
     private String mCategory;
     private String mVideoUrl;
+    private boolean isPlaying = false;
 
     public ListPlayerView(@NonNull Context context) {
         this(context, null);
@@ -39,6 +52,23 @@ public class ListPlayerView extends FrameLayout {
         cover = findViewById(R.id.cover);
         playBtn = findViewById(R.id.play_btn);
         bufferView = findViewById(R.id.buffer_view);
+        playBtn.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (isPlaying()) {
+                    inActive();
+                } else {
+                    onActive();
+                }
+            }
+        });
+    }
+
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        PageListPlay pageListPlay = PageListPlayManager.get(mCategory);
+        pageListPlay.controllerView.show();
+        return true;
     }
 
     public void bindData(String category, int widthPx, int HeightPx, String coverUrl, String videoUrl) {
@@ -94,4 +124,99 @@ public class ListPlayerView extends FrameLayout {
 
     }
 
+    @Override
+    public ViewGroup getOwner() { // playerView 的容器
+        return this;
+    }
+
+    @Override
+    public void onActive() {
+        PageListPlay pageListPlay = PageListPlayManager.get(mCategory);
+        ExoPlayer exoPlayer = pageListPlay.exoPlayer;
+        PlayerView playerView = pageListPlay.playerView;
+        PlayerControlView controllerView = pageListPlay.controllerView;
+        if (playerView == null) {
+            return;
+        }
+
+        ViewParent parent = playerView.getParent();
+        if (parent != this) { // 如果 playerView 父容器不是 this
+            if (parent != null) { // 如果 controllerView 在 ctrlParent 里面
+                ((ViewGroup) parent).removeView(playerView);
+                // 暂停正在播放的
+                ((ListPlayerView) parent).inActive();
+            }
+            ViewGroup.LayoutParams layoutParams = cover.getLayoutParams();
+            this.addView(playerView, 1, layoutParams);
+        }
+        ViewParent ctrlParent = controllerView.getParent();
+        if (ctrlParent != this) {
+            if (ctrlParent != null) {
+                ((ViewGroup) ctrlParent).removeView(controllerView);
+            }
+            FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+            layoutParams.gravity = Gravity.BOTTOM;
+            this.addView(controllerView, layoutParams);
+        }
+        controllerView.show();
+        controllerView.addVisibilityListener(this); // 播放按钮跟随 controller 隐藏/显示
+
+        if (!TextUtils.equals(pageListPlay.playUrl, mVideoUrl)) { // 不是同一个视频资源
+            MediaSource mediaSource = PageListPlayManager.createMediaSource(mVideoUrl);
+            exoPlayer.setMediaSource(mediaSource);
+            exoPlayer.prepare();
+            exoPlayer.setRepeatMode(Player.REPEAT_MODE_ONE); // 重复播放这一个
+        }
+        exoPlayer.setPlayWhenReady(true);
+        exoPlayer.addListener(this);
+    }
+
+    @Override
+    protected void onAttachedToWindow() {
+        super.onAttachedToWindow();
+        isPlaying = false;
+        bufferView.setVisibility(GONE);
+        cover.setVisibility(VISIBLE);
+        playBtn.setVisibility(VISIBLE);
+        playBtn.setImageResource(R.drawable.icon_video_play);
+    }
+
+    @Override
+    public void inActive() {
+        PageListPlay pageListPlay = PageListPlayManager.get(mCategory);
+        ExoPlayer exoPlayer = pageListPlay.exoPlayer;
+        PlayerControlView controllerView = pageListPlay.controllerView;
+        if (exoPlayer == null || controllerView == null) return;
+        exoPlayer.setPlayWhenReady(false);
+        exoPlayer.removeListener(this); // 不移除的话，当一个item player状态改变时，所有item的状态都会改变
+        controllerView.removeVisibilityListener(this); // 不移除的话，当controller出现时，所有item的play都会出现
+        cover.setVisibility(VISIBLE);
+        playBtn.setVisibility(VISIBLE);
+        playBtn.setImageResource(R.drawable.icon_video_play);
+    }
+
+    @Override
+    public boolean isPlaying() {
+        return isPlaying;
+    }
+
+    @Override
+    public void onVisibilityChange(int visibility) {
+        playBtn.setVisibility(visibility);
+        playBtn.setImageResource(isPlaying() ? R.drawable.icon_video_pause : R.drawable.icon_video_play);
+    }
+
+    @Override
+    public void onPlayerStateChanged(boolean playWhenReady, int playbackState) {
+        PageListPlay pageListPlay = PageListPlayManager.get(mCategory);
+        ExoPlayer exoPlayer = pageListPlay.exoPlayer;
+        if (playbackState == Player.STATE_READY && exoPlayer.getBufferedPosition() != 0 && playWhenReady) {
+            cover.setVisibility(INVISIBLE);
+            bufferView.setVisibility(INVISIBLE);
+        } else if (playbackState == Player.STATE_BUFFERING) {
+            bufferView.setVisibility(VISIBLE);
+        }
+        isPlaying = playbackState == Player.STATE_READY && exoPlayer.getBufferedPosition() != 0 && playWhenReady;
+        playBtn.setImageResource(isPlaying ? R.drawable.icon_video_pause : R.drawable.icon_video_play);
+    }
 }

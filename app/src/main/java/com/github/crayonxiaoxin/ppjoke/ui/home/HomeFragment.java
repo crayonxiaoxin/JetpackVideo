@@ -19,6 +19,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.github.crayonxiaoxin.libnavannotation.FragmentDestination;
 import com.github.crayonxiaoxin.ppjoke.R;
+import com.github.crayonxiaoxin.ppjoke.exoplayer.PageListPlayDetector;
 import com.github.crayonxiaoxin.ppjoke.model.Feed;
 import com.github.crayonxiaoxin.ppjoke.ui.AbsListFragment;
 import com.github.crayonxiaoxin.ppjoke.ui.MutableDataSource;
@@ -29,6 +30,8 @@ import java.util.List;
 @FragmentDestination(pageUrl = "main/tabs/home", asStarter = true)
 public class HomeFragment extends AbsListFragment<Feed, HomeViewModel> {
 
+    private PageListPlayDetector playDetector;
+
     @Override
     protected void afterCreateView() {
         mViewModel.cacheLiveData.observe(this, new Observer<PagedList<Feed>>() {
@@ -37,12 +40,29 @@ public class HomeFragment extends AbsListFragment<Feed, HomeViewModel> {
                 adapter.submitList(feeds);
             }
         });
+        playDetector = new PageListPlayDetector(this, mRecyclerView);
     }
 
     @Override
     public PagedListAdapter getAdapter() {
         String feedType = getArguments() == null ? "all" : getArguments().getString("feedType");
-        return new FeedAdapter(getContext(), feedType);
+        return new FeedAdapter(getContext(), feedType) {
+            @Override
+            public void onViewAttachedToWindow(@NonNull ViewHolder holder) {
+                super.onViewAttachedToWindow(holder);
+                if (holder.isVideoItem()) {
+                    playDetector.addTarget(holder.getListPlayerView());
+                }
+            }
+
+            @Override
+            public void onViewDetachedFromWindow(@NonNull ViewHolder holder) {
+                super.onViewDetachedFromWindow(holder);
+                if (holder.isVideoItem()) {
+                    playDetector.removeTarget(holder.getListPlayerView());
+                }
+            }
+        };
     }
 
     @Override
@@ -65,5 +85,17 @@ public class HomeFragment extends AbsListFragment<Feed, HomeViewModel> {
     @Override
     public void onRefresh(@NonNull RefreshLayout refreshLayout) {
         mViewModel.getDataSource().invalidate();
+    }
+
+    @Override
+    public void onPause() {
+        playDetector.onPause();
+        super.onPause();
+    }
+
+    @Override
+    public void onResume() {
+        playDetector.onResume();
+        super.onResume();
     }
 }

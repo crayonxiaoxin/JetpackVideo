@@ -32,6 +32,7 @@ public abstract class AbsListFragment<T, M extends AbsViewModal<T>> extends Frag
     private LayoutRefreshViewBinding binding;
     protected PagedListAdapter<T, RecyclerView.ViewHolder> adapter;
     protected M mViewModel;
+    protected RecyclerView mRecyclerView;
 
     @Nullable
     @Override
@@ -44,6 +45,7 @@ public abstract class AbsListFragment<T, M extends AbsViewModal<T>> extends Frag
         binding.refreshLayout.setOnLoadMoreListener(this);
 
         adapter = getAdapter();
+        mRecyclerView = binding.recyclerView;
         binding.recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         binding.recyclerView.setItemAnimator(null);
         binding.recyclerView.setAdapter(adapter);
