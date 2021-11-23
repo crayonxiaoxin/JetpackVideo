@@ -88,7 +88,7 @@ public class HomeViewModel extends AbsViewModal<Feed> {
             Request netRequest = withCache ? request.clone() : request;
             netRequest.cacheStrategy(key == 0 ? Request.NET_CACHE : Request.NET_ONLY);
             ApiResponse<List<Feed>> response = netRequest.execute();
-            List<Feed> data = response.body == null ? Collections.emptyList() : response.body;
+            List<Feed> data = (response == null || response.body == null) ? Collections.emptyList() : response.body;
             callback.onResult(data);
             if (key > 0) {
                 // 通过 livedata 告诉ui是否关闭上拉加载动画

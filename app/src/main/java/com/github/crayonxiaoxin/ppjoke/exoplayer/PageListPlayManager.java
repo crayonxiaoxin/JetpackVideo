@@ -25,9 +25,11 @@ public class PageListPlayManager {
 
     static {
         Application application = AppGlobals.getApplication();
+        // 创建 http 视频资源工厂
         DefaultHttpDataSource.Factory dataSourceFactory = new DefaultHttpDataSource.Factory();
         dataSourceFactory.setUserAgent(Util.getUserAgent(application, application.getPackageName()));
-        Cache cache = new SimpleCache(application.getCacheDir(), new LeastRecentlyUsedCacheEvictor(1024 * 200));
+        // 创建缓存
+        Cache cache = new SimpleCache(application.getCacheDir(), new LeastRecentlyUsedCacheEvictor(1024 * 1024 * 200));
         CacheDataSink.Factory cacheDataSinkFactory = new CacheDataSink.Factory().setCache(cache).setFragmentSize(Long.MAX_VALUE);
         CacheDataSource.Factory cacheDataSourceFactory = new CacheDataSource.Factory().setCache(cache)
                 .setUpstreamDataSourceFactory(dataSourceFactory)

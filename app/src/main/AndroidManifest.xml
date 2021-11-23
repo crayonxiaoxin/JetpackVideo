@@ -4,6 +4,7 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
     <!--  适配 Android11 应用可见性问题（提示安装最新版手机QQ）  -->
     <queries>
@@ -22,6 +23,7 @@
         android:usesCleartextTraffic="true">
         <activity
             android:name=".MainActivity"
+            android:configChanges="orientation|screenSize"
             android:exported="true"
             android:label="@string/app_name">
             <intent-filter>

@@ -1,6 +1,7 @@
 package com.github.crayonxiaoxin.ppjoke.exoplayer;
 
 import android.graphics.Point;
+import android.util.Log;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
@@ -73,8 +74,10 @@ public class PageListPlayDetector {
         }
         // 如果上一个 target 还满足条件（正在播放并且在屏幕内），则继续播放
         if (playingTarget != null && playingTarget.isPlaying() && isTargetInBounds(playingTarget)) {
+            Log.e("TAG", "autoPlay: old target" );
             return;
         }
+        Log.e("TAG", "autoPlay: new target" );
         // 否则，寻找新的符合要求的 target
         IPlayTarget activeTarget = null;
         for (IPlayTarget target : mTargets) {

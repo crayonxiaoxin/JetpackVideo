@@ -158,17 +158,21 @@ public class ListPlayerView extends FrameLayout implements IPlayTarget, PlayerCo
             layoutParams.gravity = Gravity.BOTTOM;
             this.addView(controllerView, layoutParams);
         }
-        controllerView.show();
-        controllerView.addVisibilityListener(this); // 播放按钮跟随 controller 隐藏/显示
 
-        if (!TextUtils.equals(pageListPlay.playUrl, mVideoUrl)) { // 不是同一个视频资源
+        if (TextUtils.equals(pageListPlay.playUrl, mVideoUrl)) {
+            onPlayerStateChanged(true, Player.STATE_READY);
+        } else { // 不是同一个视频资源
             MediaSource mediaSource = PageListPlayManager.createMediaSource(mVideoUrl);
             exoPlayer.setMediaSource(mediaSource);
             exoPlayer.prepare();
             exoPlayer.setRepeatMode(Player.REPEAT_MODE_ONE); // 重复播放这一个
+            pageListPlay.playUrl = mVideoUrl; // 这里之前没有赋值，导致每次都进入else分支，每次播放都重头开始
         }
-        exoPlayer.setPlayWhenReady(true);
+        controllerView.show();
+        controllerView.addVisibilityListener(this); // 播放按钮跟随 controller 隐藏/显示
+
         exoPlayer.addListener(this);
+        exoPlayer.setPlayWhenReady(true);
     }
 
     @Override

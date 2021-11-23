@@ -6,7 +6,10 @@ import android.view.View;
 
 import com.github.crayonxiaoxin.libcommon.AppGlobals;
 import com.github.crayonxiaoxin.ppjoke.R;
+import com.google.android.exoplayer2.DefaultLoadControl;
+import com.google.android.exoplayer2.DefaultRenderersFactory;
 import com.google.android.exoplayer2.ExoPlayer;
+import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
 import com.google.android.exoplayer2.ui.PlayerControlView;
 import com.google.android.exoplayer2.ui.PlayerView;
 
@@ -19,7 +22,11 @@ public class PageListPlay {
     public PageListPlay() {
         Application application = AppGlobals.getApplication();
 
-        exoPlayer = new ExoPlayer.Builder(application).build();
+        exoPlayer = new ExoPlayer.Builder(application)
+                .setRenderersFactory(new DefaultRenderersFactory(application))
+                .setTrackSelector(new DefaultTrackSelector())
+                .setLoadControl(new DefaultLoadControl())
+                .build();
         playerView = (PlayerView) LayoutInflater.from(application).inflate(R.layout.layout_exo_player_view, null, false);
         controllerView = (PlayerControlView) LayoutInflater.from(application).inflate(R.layout.layout_exo_player_controller_view, null, false);
 
