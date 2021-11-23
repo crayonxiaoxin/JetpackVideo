@@ -73,6 +73,7 @@ public class PageListPlayDetector {
             return;
         }
         // 如果上一个 target 还满足条件（正在播放并且在屏幕内），则继续播放
+        // 其实如果手动点击了播放按钮，那么 playingTarget 应该设置为对应的 target
         if (playingTarget != null && playingTarget.isPlaying() && isTargetInBounds(playingTarget)) {
             Log.e("TAG", "autoPlay: old target" );
             return;

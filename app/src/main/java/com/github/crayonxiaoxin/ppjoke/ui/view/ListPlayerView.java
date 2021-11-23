@@ -141,7 +141,7 @@ public class ListPlayerView extends FrameLayout implements IPlayTarget, PlayerCo
 
         ViewParent parent = playerView.getParent();
         if (parent != this) { // 如果 playerView 父容器不是 this
-            if (parent != null) { // 如果 controllerView 在 ctrlParent 里面
+            if (parent != null) { // 如果 playerView 在 ViewParent 里面
                 ((ViewGroup) parent).removeView(playerView);
                 // 暂停正在播放的
                 ((ListPlayerView) parent).inActive();
