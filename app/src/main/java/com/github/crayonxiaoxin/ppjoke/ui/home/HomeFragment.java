@@ -31,6 +31,15 @@ import java.util.List;
 public class HomeFragment extends AbsListFragment<Feed, HomeViewModel> {
 
     private PageListPlayDetector playDetector;
+    private String feedType;
+
+    public static HomeFragment newInstance(String feedType) {
+        HomeFragment fragment = new HomeFragment();
+        Bundle bundle = new Bundle();
+        bundle.putString("feedType", feedType);
+        fragment.setArguments(bundle);
+        return fragment;
+    }
 
     @Override
     protected void afterCreateView() {
@@ -41,11 +50,12 @@ public class HomeFragment extends AbsListFragment<Feed, HomeViewModel> {
             }
         });
         playDetector = new PageListPlayDetector(this, mRecyclerView);
+        mViewModel.setFeedType(feedType);
     }
 
     @Override
     public PagedListAdapter getAdapter() {
-        String feedType = getArguments() == null ? "all" : getArguments().getString("feedType");
+        feedType = getArguments() == null ? "all" : getArguments().getString("feedType");
         return new FeedAdapter(getContext(), feedType) {
             @Override
             public void onViewAttachedToWindow(@NonNull ViewHolder holder) {
@@ -95,7 +105,26 @@ public class HomeFragment extends AbsListFragment<Feed, HomeViewModel> {
 
     @Override
     public void onResume() {
-        playDetector.onResume();
+        // 防止从后台切换时，多个 fragment 同时播放
+        if (getParentFragment() != null) {
+            if (getParentFragment().isVisible() && isVisible()) {
+                playDetector.onResume();
+            }
+        } else {
+            if (isVisible()) {
+                playDetector.onResume();
+            }
+        }
         super.onResume();
+    }
+
+    @Override
+    public void onHiddenChanged(boolean hidden) {
+        super.onHiddenChanged(hidden);
+        if (hidden) {
+            playDetector.onPause();
+        } else {
+            playDetector.onResume();
+        }
     }
 }

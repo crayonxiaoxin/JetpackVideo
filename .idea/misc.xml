@@ -7,6 +7,7 @@
         <entry key="../../.gradle/caches/transforms-3/1c87a1993ad5020daf55bfffa2fba516/transformed/jetified-exoplayer-ui-2.16.0/res/layout/exo_player_control_view.xml" value="0.196875" />
         <entry key="../../.gradle/caches/transforms-3/1c87a1993ad5020daf55bfffa2fba516/transformed/jetified-exoplayer-ui-2.16.0/res/layout/exo_player_view.xml" value="0.196875" />
         <entry key="app/src/main/res/drawable/list_divider.xml" value="0.18802083333333333" />
+        <entry key="app/src/main/res/drawable/splash.xml" value="0.2740740740740741" />
         <entry key="app/src/main/res/layout/activity_layout_login.xml" value="0.10416666666666667" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.1" />
         <entry key="app/src/main/res/layout/fragment_dashboard.xml" value="0.13858695652173914" />

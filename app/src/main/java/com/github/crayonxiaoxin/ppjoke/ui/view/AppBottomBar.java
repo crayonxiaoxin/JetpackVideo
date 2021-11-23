@@ -35,7 +35,7 @@ public class AppBottomBar extends BottomNavigationView {
     public AppBottomBar(@NonNull Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
 
-        BottomBar bottomBar = AppConfig.getBottomBar();
+        BottomBar bottomBar = AppConfig.getBottomBarConfig();
         List<BottomBar.Tabs> tabs = bottomBar.tabs;
 
         int[][] states = new int[2][];

@@ -46,7 +46,7 @@ public abstract class AbsListFragment<T, M extends AbsViewModal<T>> extends Frag
 
         adapter = getAdapter();
         mRecyclerView = binding.recyclerView;
-        binding.recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        binding.recyclerView.setLayoutManager(new LinearLayoutManager(getContext(),LinearLayoutManager.VERTICAL,false));
         binding.recyclerView.setItemAnimator(null);
         binding.recyclerView.setAdapter(adapter);
         DividerItemDecoration decoration = new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL);

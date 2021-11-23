@@ -30,10 +30,15 @@ public class HomeViewModel extends AbsViewModal<Feed> {
     private volatile boolean withCache = true;
     public MutableLiveData<PagedList<Feed>> cacheLiveData = new MutableLiveData<>();
     private AtomicBoolean loadAfter = new AtomicBoolean(false);
+    private String mFeedType;
 
     @Override
     public DataSource createDataSource() {
         return new FeedDataSource(); // 必须返回一个新的datasource 否则不会刷新
+    }
+
+    public void setFeedType(String feedType){
+        mFeedType = feedType;
     }
 
     class FeedDataSource extends ItemKeyedDataSource<Integer, Feed> {
@@ -68,7 +73,7 @@ public class HomeViewModel extends AbsViewModal<Feed> {
         Request request = ApiService.get("/feeds/queryHotFeedsList")
                 .responseType(new TypeReference<ArrayList<Feed>>() {
                 }.getType())
-                .addParam("feedType", null)
+                .addParam("feedType", mFeedType)
                 .addParam("userId", UserManager.get().getUserId())
                 .addParam("feedId", key)
                 .addParam("pageCount", 10);

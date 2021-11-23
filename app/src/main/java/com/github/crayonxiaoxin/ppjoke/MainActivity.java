@@ -18,6 +18,7 @@ import com.github.crayonxiaoxin.ppjoke.ui.login.UserManager;
 import com.github.crayonxiaoxin.ppjoke.ui.view.AppBottomBar;
 import com.github.crayonxiaoxin.ppjoke.utils.AppConfig;
 import com.github.crayonxiaoxin.ppjoke.utils.NavGraphBuilder;
+import com.github.crayonxiaoxin.ppjoke.utils.StatusBar;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.util.HashMap;
@@ -31,8 +32,10 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        // 设回本身的主题，否则 splash 会一直保留
+        setTheme(R.style.Theme_Ppjoke);
+        StatusBar.fitSystemBar(this);
         super.onCreate(savedInstanceState);
-
         setContentView(R.layout.activity_main);
 
         navView = findViewById(R.id.nav_view);

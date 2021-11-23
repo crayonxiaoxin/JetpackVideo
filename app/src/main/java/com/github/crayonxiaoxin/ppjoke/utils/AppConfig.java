@@ -7,16 +7,20 @@ import com.alibaba.fastjson.TypeReference;
 import com.github.crayonxiaoxin.libcommon.AppGlobals;
 import com.github.crayonxiaoxin.ppjoke.model.BottomBar;
 import com.github.crayonxiaoxin.ppjoke.model.Destination;
+import com.github.crayonxiaoxin.ppjoke.model.SofaTab;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 
 public class AppConfig {
     private static HashMap<String, Destination> sDestinationConfig;
     private static BottomBar sBottomBar;
+    private static SofaTab sSofaTab;
 
     public static HashMap<String, Destination> getDestConfig() {
         if (sDestinationConfig == null) {
@@ -27,12 +31,22 @@ public class AppConfig {
         return sDestinationConfig;
     }
 
-    public static BottomBar getBottomBar() {
+    public static BottomBar getBottomBarConfig() {
         if (sBottomBar == null) {
             String content = parseFile("main_tabs_config.json");
             sBottomBar = JSON.parseObject(content, BottomBar.class);
         }
         return sBottomBar;
+    }
+
+    public static SofaTab getSofaTabConfig() {
+        if (sSofaTab == null) {
+            String content = parseFile("sofa_tabs_config.json");
+            sSofaTab = JSON.parseObject(content, SofaTab.class);
+            // 排序
+            Collections.sort(sSofaTab.tabs, (tab1, tab2) -> tab1.index < tab2.index ? -1 : 1);
+        }
+        return sSofaTab;
     }
 
     private static String parseFile(String filename) {
