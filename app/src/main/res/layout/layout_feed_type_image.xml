@@ -28,6 +28,7 @@
 
         <include
             layout="@layout/layout_feed_text"
+            app:lines="@{3}"
             app:feedText="@{feed.feedsText}" />
 
         <!--   图片区域     -->

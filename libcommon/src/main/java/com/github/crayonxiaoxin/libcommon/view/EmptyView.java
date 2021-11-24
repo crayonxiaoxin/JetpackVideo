@@ -1,4 +1,4 @@
-package com.github.crayonxiaoxin.libcommon;
+package com.github.crayonxiaoxin.libcommon.view;
 
 import android.content.Context;
 import android.text.TextUtils;
@@ -13,6 +13,8 @@ import android.widget.TextView;
 
 import androidx.annotation.DrawableRes;
 import androidx.annotation.Nullable;
+
+import com.github.crayonxiaoxin.libcommon.R;
 
 public class EmptyView extends LinearLayout {
     private ImageView icon;

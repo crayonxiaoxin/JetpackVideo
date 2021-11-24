@@ -3,7 +3,7 @@ package com.github.crayonxiaoxin.ppjoke.exoplayer;
 import android.app.Application;
 import android.net.Uri;
 
-import com.github.crayonxiaoxin.libcommon.AppGlobals;
+import com.github.crayonxiaoxin.libcommon.global.AppGlobals;
 import com.google.android.exoplayer2.MediaItem;
 import com.google.android.exoplayer2.source.MediaSource;
 import com.google.android.exoplayer2.source.ProgressiveMediaSource;

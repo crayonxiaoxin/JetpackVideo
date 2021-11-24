@@ -1,11 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <data>
 
         <variable
             name="feedText"
             type="java.lang.String" />
+
+        <variable
+            name="lines"
+            type="java.lang.Integer" />
 
         <import type="android.text.TextUtils" />
 
@@ -17,11 +22,12 @@
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="@dimen/dp_16"
         android:ellipsize="end"
-        android:maxLines="3"
+        android:maxLines="@{lines}"
         android:paddingVertical="@dimen/dp_10"
         android:text="@{feedText}"
         android:textColor="@color/color_2f2"
         android:textSize="@dimen/sp_16"
+        tools:text="@string/app_name"
         android:visibility="@{TextUtils.isEmpty(feedText)?View.GONE:View.VISIBLE}">
 
     </TextView>

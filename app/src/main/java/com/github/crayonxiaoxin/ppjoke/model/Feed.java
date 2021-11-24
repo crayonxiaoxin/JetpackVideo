@@ -34,6 +34,17 @@ public class Feed extends BaseObservable implements Serializable {
         return ugc;
     }
 
+    @Bindable
+    public Comment getTopComment() {
+        return topComment;
+    }
+
+    @Bindable
+    public User getAuthor() {
+        if (author == null) author = new User();
+        return author;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

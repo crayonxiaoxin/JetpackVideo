@@ -10,7 +10,6 @@ import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,14 +19,13 @@ import android.widget.FrameLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.github.crayonxiaoxin.libcommon.PixUtils;
-import com.github.crayonxiaoxin.libcommon.RoundFrameLayout;
-import com.github.crayonxiaoxin.libcommon.ViewHelper;
+import com.github.crayonxiaoxin.libcommon.utils.PixUtils;
+import com.github.crayonxiaoxin.libcommon.view.RoundFrameLayout;
+import com.github.crayonxiaoxin.libcommon.view.ViewHelper;
 import com.github.crayonxiaoxin.ppjoke.R;
 import com.github.crayonxiaoxin.ppjoke.ui.view.PPImageView;
 

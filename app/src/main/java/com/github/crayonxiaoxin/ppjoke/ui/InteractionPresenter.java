@@ -1,24 +1,26 @@
-package com.github.crayonxiaoxin.ppjoke.ui.home;
+package com.github.crayonxiaoxin.ppjoke.ui;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.util.Log;
 import android.view.View;
+import android.widget.Toast;
 
-import androidx.annotation.NonNull;
+import androidx.arch.core.executor.ArchTaskExecutor;
 import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.Observer;
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONException;
 import com.alibaba.fastjson.JSONObject;
-import com.github.crayonxiaoxin.libcommon.AppGlobals;
+import com.github.crayonxiaoxin.libcommon.global.AppGlobals;
 import com.github.crayonxiaoxin.libnetwork.ApiResponse;
 import com.github.crayonxiaoxin.libnetwork.ApiService;
 import com.github.crayonxiaoxin.libnetwork.JsonCallback;
 import com.github.crayonxiaoxin.ppjoke.model.Comment;
 import com.github.crayonxiaoxin.ppjoke.model.Feed;
 import com.github.crayonxiaoxin.ppjoke.model.User;
-import com.github.crayonxiaoxin.ppjoke.ui.ShareDialog;
 import com.github.crayonxiaoxin.ppjoke.ui.login.UserManager;
 
 import java.util.Date;
@@ -30,6 +32,8 @@ public class InteractionPresenter {
     public static final String URL_TOGGLE_FEED_DISS = "/ugc/dissFeed";
     public static final String URL_SHARE = "/ugc/increaseShareCount";
     public static final String URL_TOGGLE_COMMENT_LIKED = "/ugc/toggleCommentLike";
+    public static final String URL_TOGGLE_FEED_FAVORITE = "/ugc/toggleFavorite";
+    public static final String URL_TOGGLE_USER_FOLLOW = "/ugc/toggleUserFollow";
 
     public static void toggleFeedLiked(LifecycleOwner owner, Feed feed) {
         if (!UserManager.get().isLogin()) {
@@ -107,7 +111,7 @@ public class InteractionPresenter {
     public static void openShareDialog(LifecycleOwner owner, Feed feed) {
         String url = "http://h5.aliyun.ppkoke.com/item/%s?timestamp=%s&user_id=%s";
         String format = String.format(url, feed.itemId, new Date().getTime(), UserManager.get().getUserId());
-        Log.e("TAG", "openShareDialog: context null? " +( owner == null));
+        Log.e("TAG", "openShareDialog: context null? " + (owner == null));
         ShareDialog shareDialog = new ShareDialog((Context) owner);
         shareDialog.setShareContent(format);
         shareDialog.setShareIemClickListener(new View.OnClickListener() {
@@ -160,6 +164,7 @@ public class InteractionPresenter {
                         if (response.body != null) {
                             try {
                                 boolean hasLiked = response.body.getBooleanValue("hasLiked");
+                                Log.e("TAG", "onSuccess: " + JSON.toJSONString(comment));
                                 comment.getUgc().setHasLike(hasLiked);
                             } catch (JSONException e) {
                                 e.printStackTrace();
@@ -167,5 +172,100 @@ public class InteractionPresenter {
                         }
                     }
                 });
+    }
+
+    public static void toggleFeedFavorite(LifecycleOwner owner, Feed feed) {
+        if (!UserManager.get().isLogin()) {
+            Log.e("TAG", "toggleFeedFavorite: 1");
+            LiveData<User> loginLiveData = UserManager.get().login(AppGlobals.getApplication());
+            loginLiveData.observe(owner, new Observer<User>() {
+                @Override
+                public void onChanged(User user) {
+                    if (user != null) {
+                        toggleFeedFavoriteInternal(feed);
+                    }
+                    loginLiveData.removeObserver(this);
+                }
+            });
+            return;
+        }
+        Log.e("TAG", "toggleFeedFavorite: 2");
+
+        toggleFeedFavoriteInternal(feed);
+    }
+
+    private static void toggleFeedFavoriteInternal(Feed feed) {
+        ApiService.get(URL_TOGGLE_FEED_FAVORITE)
+                .addParam("itemId", feed.itemId)
+                .addParam("userId", UserManager.get().getUserId())
+                .execute(new JsonCallback<JSONObject>() {
+                    @Override
+                    public void onSuccess(ApiResponse<JSONObject> response) {
+                        if (response.body != null) {
+                            try {
+                                boolean hasFavorite = response.body.getBooleanValue("hasFavorite");
+                                feed.getUgc().setHasFavorites(hasFavorite);
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void onError(ApiResponse<JSONObject> response) {
+                        showToast(response.message);
+                    }
+                });
+    }
+
+    public static void toggleFollowUser(LifecycleOwner owner, User user) {
+        if (!UserManager.get().isLogin()) {
+            LiveData<User> loginLiveData = UserManager.get().login(AppGlobals.getApplication());
+            loginLiveData.observe(owner, new Observer<User>() {
+                @Override
+                public void onChanged(User user) {
+                    if (user != null) {
+                        toggleFollowUserInternal(user);
+                    }
+                    loginLiveData.removeObserver(this);
+                }
+            });
+            return;
+        }
+        toggleFollowUserInternal(user);
+    }
+
+    private static void toggleFollowUserInternal(User user) {
+        ApiService.get(URL_TOGGLE_USER_FOLLOW)
+                .addParam("userId", user.userId)
+                .addParam("followUserId", UserManager.get().getUserId())
+                .execute(new JsonCallback<JSONObject>() {
+                    @Override
+                    public void onSuccess(ApiResponse<JSONObject> response) {
+                        if (response.body != null) {
+                            try {
+                                boolean hasFollowed = response.body.getBooleanValue("hasLiked");
+                                user.setHasFollowed(hasFollowed);
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void onError(ApiResponse<JSONObject> response) {
+                        showToast(response.message);
+                    }
+                });
+    }
+
+    @SuppressLint("RestrictedApi")
+    private static void showToast(String message) {
+        ArchTaskExecutor.getMainThreadExecutor().execute(new Runnable() {
+            @Override
+            public void run() {
+                Toast.makeText(AppGlobals.getApplication(), message, Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 }

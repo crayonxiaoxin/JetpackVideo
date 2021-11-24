@@ -1,6 +1,8 @@
-package com.github.crayonxiaoxin.libcommon;
+package com.github.crayonxiaoxin.libcommon.utils;
 
 import android.util.DisplayMetrics;
+
+import com.github.crayonxiaoxin.libcommon.global.AppGlobals;
 
 public class PixUtils {
     public static DisplayMetrics displayMetrics() {

@@ -8,7 +8,7 @@ import java.util.Objects;
 
 public class Comment extends BaseObservable implements Serializable {
     public Integer id;
-    public Integer itemId;
+    public Long itemId;
     public Long commentId;
     public Integer userId;
     public Integer commentType;
@@ -25,9 +25,24 @@ public class Comment extends BaseObservable implements Serializable {
     public Ugc ugc;
 
     @Bindable
+    public Boolean getHasLiked() {
+        return hasLiked;
+    }
+
+    public void setHasLiked(Boolean hasLiked) {
+        this.hasLiked = hasLiked;
+    }
+
+    @Bindable
     public Ugc getUgc() {
         if (ugc == null) ugc = new Ugc();
         return ugc;
+    }
+
+    @Bindable
+    public User getAuthor() {
+        if (author == null) author = new User();
+        return author;
     }
 
     @Override

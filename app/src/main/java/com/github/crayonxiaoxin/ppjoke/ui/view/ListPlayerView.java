@@ -16,14 +16,13 @@ import android.widget.ProgressBar;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import com.github.crayonxiaoxin.libcommon.PixUtils;
+import com.github.crayonxiaoxin.libcommon.utils.PixUtils;
 import com.github.crayonxiaoxin.ppjoke.R;
 import com.github.crayonxiaoxin.ppjoke.exoplayer.IPlayTarget;
 import com.github.crayonxiaoxin.ppjoke.exoplayer.PageListPlay;
 import com.github.crayonxiaoxin.ppjoke.exoplayer.PageListPlayManager;
 import com.google.android.exoplayer2.ExoPlayer;
 import com.google.android.exoplayer2.Player;
-import com.google.android.exoplayer2.PlayerMessage;
 import com.google.android.exoplayer2.source.MediaSource;
 import com.google.android.exoplayer2.ui.PlayerControlView;
 import com.google.android.exoplayer2.ui.PlayerView;

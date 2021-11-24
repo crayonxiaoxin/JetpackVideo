@@ -18,7 +18,7 @@ import com.github.crayonxiaoxin.ppjoke.ui.login.UserManager;
 import com.github.crayonxiaoxin.ppjoke.ui.view.AppBottomBar;
 import com.github.crayonxiaoxin.ppjoke.utils.AppConfig;
 import com.github.crayonxiaoxin.ppjoke.utils.NavGraphBuilder;
-import com.github.crayonxiaoxin.ppjoke.utils.StatusBar;
+import com.github.crayonxiaoxin.libcommon.utils.StatusBar;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.util.HashMap;

@@ -19,7 +19,7 @@
 
         <import type="android.content.Context" />
 
-        <import type="com.github.crayonxiaoxin.ppjoke.ui.home.InteractionPresenter" />
+        <import type="com.github.crayonxiaoxin.ppjoke.ui.InteractionPresenter" />
 
     </data>
 

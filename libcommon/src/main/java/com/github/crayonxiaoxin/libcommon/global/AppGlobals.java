@@ -1,4 +1,4 @@
-package com.github.crayonxiaoxin.libcommon;
+package com.github.crayonxiaoxin.libcommon.global;
 
 import android.app.Application;
 

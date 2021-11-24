@@ -15,12 +15,9 @@ import androidx.databinding.BindingAdapter;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestBuilder;
 import com.bumptech.glide.load.resource.bitmap.CircleCrop;
-import com.bumptech.glide.request.Request;
 import com.bumptech.glide.request.target.SimpleTarget;
-import com.bumptech.glide.request.target.SizeReadyCallback;
-import com.bumptech.glide.request.target.Target;
 import com.bumptech.glide.request.transition.Transition;
-import com.github.crayonxiaoxin.libcommon.PixUtils;
+import com.github.crayonxiaoxin.libcommon.utils.PixUtils;
 
 import jp.wasabeef.glide.transformations.BlurTransformation;
 

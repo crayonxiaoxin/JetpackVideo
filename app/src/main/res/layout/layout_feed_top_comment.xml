@@ -19,7 +19,7 @@
 
         <import type="com.github.crayonxiaoxin.ppjoke.utils.StringConvert" />
 
-        <import type="com.github.crayonxiaoxin.ppjoke.ui.home.InteractionPresenter" />
+        <import type="com.github.crayonxiaoxin.ppjoke.ui.InteractionPresenter" />
     </data>
 
     <FrameLayout

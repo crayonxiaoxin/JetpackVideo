@@ -2,9 +2,8 @@ package com.github.crayonxiaoxin.ppjoke.exoplayer;
 
 import android.app.Application;
 import android.view.LayoutInflater;
-import android.view.View;
 
-import com.github.crayonxiaoxin.libcommon.AppGlobals;
+import com.github.crayonxiaoxin.libcommon.global.AppGlobals;
 import com.github.crayonxiaoxin.ppjoke.R;
 import com.google.android.exoplayer2.DefaultLoadControl;
 import com.google.android.exoplayer2.DefaultRenderersFactory;

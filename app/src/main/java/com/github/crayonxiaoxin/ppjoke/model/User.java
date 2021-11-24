@@ -1,9 +1,14 @@
 package com.github.crayonxiaoxin.ppjoke.model;
 
+import androidx.databinding.BaseObservable;
+import androidx.databinding.Bindable;
+
+import com.github.crayonxiaoxin.ppjoke.BR;
+
 import java.io.Serializable;
 import java.util.Objects;
 
-public class User implements Serializable {
+public class User extends BaseObservable implements Serializable {
     public Integer id;
     public Integer userId;
     public String name;
@@ -33,5 +38,15 @@ public class User implements Serializable {
     @Override
     public int hashCode() {
         return Objects.hash(id, userId, name, avatar, description, likeCount, topCommentCount, followCount, followerCount, qqOpenId, expiresTime, score, historyCount, commentCount, favoriteCount, feedCount, hasFollow);
+    }
+
+    @Bindable
+    public Boolean getHasFollow() {
+        return hasFollow;
+    }
+
+    public void setHasFollowed(boolean hasFollowed) {
+        this.hasFollow = hasFollowed;
+        notifyPropertyChanged(BR._all);
     }
 }

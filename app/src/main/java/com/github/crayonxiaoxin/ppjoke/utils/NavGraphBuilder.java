@@ -10,7 +10,7 @@ import androidx.navigation.NavGraphNavigator;
 import androidx.navigation.NavigatorProvider;
 import androidx.navigation.fragment.FragmentNavigator;
 
-import com.github.crayonxiaoxin.libcommon.AppGlobals;
+import com.github.crayonxiaoxin.libcommon.global.AppGlobals;
 import com.github.crayonxiaoxin.ppjoke.FixFragmentNavigator;
 import com.github.crayonxiaoxin.ppjoke.model.Destination;
 

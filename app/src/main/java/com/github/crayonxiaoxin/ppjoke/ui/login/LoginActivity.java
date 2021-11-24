@@ -7,7 +7,7 @@ import android.widget.Toast;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.github.crayonxiaoxin.libcommon.AppGlobals;
+import com.github.crayonxiaoxin.libcommon.global.AppGlobals;
 import com.github.crayonxiaoxin.libnetwork.ApiResponse;
 import com.github.crayonxiaoxin.libnetwork.ApiService;
 import com.github.crayonxiaoxin.libnetwork.JsonCallback;

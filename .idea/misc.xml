@@ -6,8 +6,11 @@
         <entry key="../../../../layout/custom_preview.xml" value="0.221875" />
         <entry key="../../.gradle/caches/transforms-3/1c87a1993ad5020daf55bfffa2fba516/transformed/jetified-exoplayer-ui-2.16.0/res/layout/exo_player_control_view.xml" value="0.196875" />
         <entry key="../../.gradle/caches/transforms-3/1c87a1993ad5020daf55bfffa2fba516/transformed/jetified-exoplayer-ui-2.16.0/res/layout/exo_player_view.xml" value="0.196875" />
+        <entry key="app/src/main/res/drawable/bg_edit_view.xml" value="0.27037037037037037" />
+        <entry key="app/src/main/res/drawable/bg_edit_view2.xml" value="0.27037037037037037" />
         <entry key="app/src/main/res/drawable/list_divider.xml" value="0.18802083333333333" />
         <entry key="app/src/main/res/drawable/splash.xml" value="0.2740740740740741" />
+        <entry key="app/src/main/res/layout/activity_feed_detail_type_image.xml" value="0.19021739130434784" />
         <entry key="app/src/main/res/layout/activity_layout_login.xml" value="0.10416666666666667" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.1" />
         <entry key="app/src/main/res/layout/fragment_dashboard.xml" value="0.13858695652173914" />
@@ -21,6 +24,10 @@
         <entry key="app/src/main/res/layout/layout_exo_player_controller_view.xml" value="0.196875" />
         <entry key="app/src/main/res/layout/layout_exo_player_view.xml" value="0.196875" />
         <entry key="app/src/main/res/layout/layout_feed_author.xml" value="0.18" />
+        <entry key="app/src/main/res/layout/layout_feed_comment_list_item.xml" value="0.25" />
+        <entry key="app/src/main/res/layout/layout_feed_detail_author_info.xml" value="0.33" />
+        <entry key="app/src/main/res/layout/layout_feed_detail_bottom_inateraction.xml" value="0.19021739130434784" />
+        <entry key="app/src/main/res/layout/layout_feed_detail_type_image_header.xml" value="0.19021739130434784" />
         <entry key="app/src/main/res/layout/layout_feed_interaction.xml" value="0.1" />
         <entry key="app/src/main/res/layout/layout_feed_tag.xml" value="0.5" />
         <entry key="app/src/main/res/layout/layout_feed_text.xml" value="0.1793478260869565" />

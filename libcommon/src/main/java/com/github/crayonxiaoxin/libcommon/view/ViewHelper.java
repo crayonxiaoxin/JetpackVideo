@@ -1,4 +1,4 @@
-package com.github.crayonxiaoxin.libcommon;
+package com.github.crayonxiaoxin.libcommon.view;
 
 import android.content.res.TypedArray;
 import android.graphics.Outline;
@@ -7,6 +7,8 @@ import android.view.View;
 import android.view.ViewOutlineProvider;
 
 import androidx.annotation.Nullable;
+
+import com.github.crayonxiaoxin.libcommon.R;
 
 public class ViewHelper {
     public static final int RADIUS_ALL = 0;
