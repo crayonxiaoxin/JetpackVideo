@@ -17,7 +17,7 @@ import com.github.crayonxiaoxin.libnetwork.JsonCallback;
 import com.github.crayonxiaoxin.libnetwork.Request;
 import com.github.crayonxiaoxin.ppjoke.AbsViewModal;
 import com.github.crayonxiaoxin.ppjoke.model.Feed;
-import com.github.crayonxiaoxin.ppjoke.ui.MutableDataSource;
+import com.github.crayonxiaoxin.ppjoke.ui.MutablePageKeyedDataSource;
 import com.github.crayonxiaoxin.ppjoke.ui.login.UserManager;
 
 import java.util.ArrayList;
@@ -83,7 +83,7 @@ public class HomeViewModel extends AbsViewModal<Feed> {
                 @Override
                 public void cacheSuccess(ApiResponse<List<Feed>> response) {
                     Log.e("TAG", "cacheSuccess: " + response.body);
-                    MutableDataSource<Integer, Feed> dataSource = new MutableDataSource<>();
+                    MutablePageKeyedDataSource<Integer, Feed> dataSource = new MutablePageKeyedDataSource<>();
                     dataSource.data.addAll(response.body);
                     cacheLiveData.postValue(dataSource.buildNewPagedList(config));
                 }

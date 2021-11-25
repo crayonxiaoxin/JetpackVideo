@@ -63,9 +63,11 @@ public class LiveDataBus {
 
         @Override
         public void observe(@NonNull LifecycleOwner owner, @NonNull Observer<? super T> observer) {
+            // 不需要粘性事件
             observerSticky(owner, observer, false);
         }
 
+        // 是否需要粘性事件，liveData本身是粘性事件的，这里设置开关
         private void observerSticky(LifecycleOwner owner, Observer<? super T> observer, boolean isSticky) {
             super.observe(owner, new WrapperObserver(this, observer, isSticky));
             owner.getLifecycle().addObserver(new LifecycleEventObserver() {
