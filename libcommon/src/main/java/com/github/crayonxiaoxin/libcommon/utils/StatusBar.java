@@ -33,15 +33,15 @@ public class StatusBar {
         View decorView = window.getDecorView();
         // false 状态栏覆盖在 fitSystemBar 之上，true 不会覆盖
         WindowCompat.setDecorFitsSystemWindows(window, decorFitsSystemWindows);
-        // 设置 statusBar 透明
+        // 绘制 statusBar 透明色
         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
         window.setStatusBarColor(Color.TRANSPARENT);
         // 设置 LightStatusBars 文字颜色
         WindowInsetsControllerCompat windowInsetsController = ViewCompat.getWindowInsetsController(decorView);
         if (windowInsetsController != null) {
-            windowInsetsController.setAppearanceLightStatusBars(darkIcons);
+            windowInsetsController.setAppearanceLightStatusBars(darkIcons); // 状态栏文字图标颜色
             if (fullscreen) {
-                windowInsetsController.hide(WindowInsetsCompat.Type.statusBars());
+                windowInsetsController.hide(WindowInsetsCompat.Type.statusBars()); // 隐藏状态栏
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) { // 适配刘海屏无法全屏（状态栏填充黑色）的问题
                     WindowManager.LayoutParams layoutParams = window.getAttributes();
                     layoutParams.layoutInDisplayCutoutMode = WindowManager.LayoutParams.LAYOUT_IN_DISPLAY_CUTOUT_MODE_SHORT_EDGES;

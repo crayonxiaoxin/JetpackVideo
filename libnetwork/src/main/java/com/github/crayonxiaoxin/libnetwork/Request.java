@@ -129,8 +129,13 @@ public abstract class Request<T, R extends Request> implements Cloneable {
             return parseResponse(response, null);
         } catch (IOException e) {
             e.printStackTrace();
+            ApiResponse<T> result = new ApiResponse<>();
+            result.status = 500;
+            result.body = (T) null;
+            result.success = false;
+            result.message = "请求失败";
+            return result;
         }
-        return null;
     }
 
     private ApiResponse<T> readCache() {

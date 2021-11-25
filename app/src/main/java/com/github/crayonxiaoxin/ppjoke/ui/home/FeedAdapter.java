@@ -1,5 +1,7 @@
 package com.github.crayonxiaoxin.ppjoke.ui.home;
 
+import static com.github.crayonxiaoxin.ppjoke.BR.feed;
+
 import android.content.Context;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -9,14 +11,17 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.databinding.ViewDataBinding;
 import androidx.lifecycle.LifecycleOwner;
+import androidx.lifecycle.Observer;
 import androidx.paging.PagedListAdapter;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.github.crayonxiaoxin.libcommon.extension.LiveDataBus;
 import com.github.crayonxiaoxin.ppjoke.BR;
 import com.github.crayonxiaoxin.ppjoke.databinding.LayoutFeedTypeImageBinding;
 import com.github.crayonxiaoxin.ppjoke.databinding.LayoutFeedTypeVideoBinding;
 import com.github.crayonxiaoxin.ppjoke.model.Feed;
+import com.github.crayonxiaoxin.ppjoke.ui.InteractionPresenter;
 import com.github.crayonxiaoxin.ppjoke.ui.detail.FeedDetailActivity;
 import com.github.crayonxiaoxin.ppjoke.ui.view.ListPlayerView;
 
@@ -68,8 +73,36 @@ class FeedAdapter extends PagedListAdapter<Feed, FeedAdapter.ViewHolder> {
             @Override
             public void onClick(View view) {
                 FeedDetailActivity.startFeedDetailActivity(mContext, item, mCategory);
+                if (mFeedObserver == null) { // 没有的时候才注册
+                    mFeedObserver = new FeedObserver();
+                    // 先注册 observer，监听详情页数据改变
+                    LiveDataBus.get().with(InteractionPresenter.DATA_FROM_INTERACTION)
+                            .observe((LifecycleOwner) mContext, mFeedObserver);
+                }
+                mFeedObserver.setFeed(item); // 每次点击的数据
             }
         });
+    }
+
+    private FeedObserver mFeedObserver;
+
+    class FeedObserver implements Observer<Feed> {
+
+        private Feed mFeed;
+
+        @Override
+        public void onChanged(Feed newFeed) { // 新数据
+            if (!mFeed.id.equals(newFeed.id)) { // 如果新数据不是当前点击的旧数据，则不需要更新
+                return;
+            }
+            mFeed.ugc = newFeed.ugc;
+            mFeed.author = newFeed.author;
+            mFeed.notifyChange();
+        }
+
+        public void setFeed(Feed feed) { // 老数据
+            mFeed = feed;
+        }
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {

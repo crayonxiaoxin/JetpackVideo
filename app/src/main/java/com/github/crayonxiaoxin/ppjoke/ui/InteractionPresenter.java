@@ -14,6 +14,7 @@ import androidx.lifecycle.Observer;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONException;
 import com.alibaba.fastjson.JSONObject;
+import com.github.crayonxiaoxin.libcommon.extension.LiveDataBus;
 import com.github.crayonxiaoxin.libcommon.global.AppGlobals;
 import com.github.crayonxiaoxin.libnetwork.ApiResponse;
 import com.github.crayonxiaoxin.libnetwork.ApiService;
@@ -27,6 +28,7 @@ import java.util.Date;
 
 
 public class InteractionPresenter {
+    public static final String DATA_FROM_INTERACTION = "data_from_interaction";
 
     public static final String URL_TOGGLE_FEED_LIKED = "/ugc/toggleFeedLike";
     public static final String URL_TOGGLE_FEED_DISS = "/ugc/dissFeed";
@@ -64,6 +66,8 @@ public class InteractionPresenter {
                                 Log.e("TAG", "onSuccess: " + response);
                                 boolean hasLiked = response.body.getBoolean("hasLiked").booleanValue();
                                 feed.getUgc().setHasLike(hasLiked);
+                                // 更新数据，通知到列表
+                                LiveDataBus.get().with(DATA_FROM_INTERACTION).postValue(feed);
                             } catch (JSONException e) {
                                 e.printStackTrace();
                             }
@@ -205,6 +209,7 @@ public class InteractionPresenter {
                             try {
                                 boolean hasFavorite = response.body.getBooleanValue("hasFavorite");
                                 feed.getUgc().setHasFavorites(hasFavorite);
+                                LiveDataBus.get().with(DATA_FROM_INTERACTION).postValue(feed);
                             } catch (JSONException e) {
                                 e.printStackTrace();
                             }
@@ -218,26 +223,26 @@ public class InteractionPresenter {
                 });
     }
 
-    public static void toggleFollowUser(LifecycleOwner owner, User user) {
+    public static void toggleFollowUser(LifecycleOwner owner, Feed feed) {
         if (!UserManager.get().isLogin()) {
             LiveData<User> loginLiveData = UserManager.get().login(AppGlobals.getApplication());
             loginLiveData.observe(owner, new Observer<User>() {
                 @Override
                 public void onChanged(User user) {
                     if (user != null) {
-                        toggleFollowUserInternal(user);
+                        toggleFollowUserInternal(feed);
                     }
                     loginLiveData.removeObserver(this);
                 }
             });
             return;
         }
-        toggleFollowUserInternal(user);
+        toggleFollowUserInternal(feed);
     }
 
-    private static void toggleFollowUserInternal(User user) {
+    private static void toggleFollowUserInternal(Feed feed) {
         ApiService.get(URL_TOGGLE_USER_FOLLOW)
-                .addParam("userId", user.userId)
+                .addParam("userId", feed.author.userId)
                 .addParam("followUserId", UserManager.get().getUserId())
                 .execute(new JsonCallback<JSONObject>() {
                     @Override
@@ -245,7 +250,8 @@ public class InteractionPresenter {
                         if (response.body != null) {
                             try {
                                 boolean hasFollowed = response.body.getBooleanValue("hasLiked");
-                                user.setHasFollowed(hasFollowed);
+                                feed.getAuthor().setHasFollowed(hasFollowed);
+                                LiveDataBus.get().with(DATA_FROM_INTERACTION).postValue(feed);
                             } catch (JSONException e) {
                                 e.printStackTrace();
                             }
