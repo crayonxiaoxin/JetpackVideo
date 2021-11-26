@@ -58,6 +58,7 @@ public class CommentDialog extends AppCompatDialogFragment implements View.OnCli
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         Window window = getDialog().getWindow();
+//        window.setWindowAnimations(R.style.sendCommentDialog);
 
         ViewGroup viewById = window.findViewById(R.id.content); // 似乎只要 findViewById 不用 setContainer 都可以生效（宽度占满全屏）
         mBinding = LayoutCommentDialogBinding.inflate(inflater, viewById, false);
@@ -71,8 +72,8 @@ public class CommentDialog extends AppCompatDialogFragment implements View.OnCli
         WindowManager.LayoutParams attributes = window.getAttributes();
         attributes.dimAmount = 0f;
         attributes.gravity = Gravity.BOTTOM;
-        attributes.windowAnimations = R.style.sendCommentDialog;
-        attributes.flags = WindowManager.LayoutParams.FLAG_FULLSCREEN | WindowManager.LayoutParams.FLAG_DIM_BEHIND;
+//        attributes.windowAnimations = R.style.sendCommentDialog;
+        attributes.flags |= WindowManager.LayoutParams.FLAG_FULLSCREEN | WindowManager.LayoutParams.FLAG_DIM_BEHIND;
         window.setAttributes(attributes);
         window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.MATCH_PARENT);
 
