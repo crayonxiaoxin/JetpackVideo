@@ -4,6 +4,7 @@ import static android.content.Context.INPUT_METHOD_SERVICE;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -13,6 +14,7 @@ import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
@@ -58,7 +60,7 @@ public class CommentDialog extends AppCompatDialogFragment implements View.OnCli
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         Window window = getDialog().getWindow();
-//        window.setWindowAnimations(R.style.sendCommentDialog);
+        window.setWindowAnimations(R.style.sendCommentDialog);
 
         ViewGroup viewById = window.findViewById(R.id.content); // 似乎只要 findViewById 不用 setContainer 都可以生效（宽度占满全屏）
         mBinding = LayoutCommentDialogBinding.inflate(inflater, viewById, false);
@@ -72,10 +74,26 @@ public class CommentDialog extends AppCompatDialogFragment implements View.OnCli
         WindowManager.LayoutParams attributes = window.getAttributes();
         attributes.dimAmount = 0f;
         attributes.gravity = Gravity.BOTTOM;
-//        attributes.windowAnimations = R.style.sendCommentDialog;
-        attributes.flags |= WindowManager.LayoutParams.FLAG_FULLSCREEN | WindowManager.LayoutParams.FLAG_DIM_BEHIND;
+        attributes.windowAnimations = R.style.sendCommentDialog;
+        attributes.flags = WindowManager.LayoutParams.FLAG_FULLSCREEN
+                | WindowManager.LayoutParams.FLAG_DIM_BEHIND;
+        attributes.width = ViewGroup.LayoutParams.MATCH_PARENT;
+        attributes.height = ViewGroup.LayoutParams.MATCH_PARENT;
         window.setAttributes(attributes);
-        window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.MATCH_PARENT);
+        // SOFT_INPUT_ADJUST_NOTHING 可以取消弹起键盘时输入框动画
+        window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_NOTHING);
+//        window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.MATCH_PARENT);
+
+        window.getDecorView().setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                if (motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
+                    hideInput();
+                    dismiss();
+                }
+                return false;
+            }
+        });
 
         FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.WRAP_CONTENT);
         layoutParams.gravity = Gravity.BOTTOM;
@@ -102,6 +120,7 @@ public class CommentDialog extends AppCompatDialogFragment implements View.OnCli
         mBinding.inputView.setOnKeyListener(new View.OnKeyListener() {
             @Override
             public boolean onKey(View view, int i, KeyEvent keyEvent) {
+                Log.e("TAG", "onKey: back");
                 if (keyEvent.getKeyCode() == KeyEvent.KEYCODE_BACK) {
                     Log.e("TAG", "onKey: back");
                     mBinding.inputView.postDelayed(new Runnable() {
@@ -121,7 +140,6 @@ public class CommentDialog extends AppCompatDialogFragment implements View.OnCli
     public void hideInput() {
         InputMethodManager manager = (InputMethodManager) getContext().getSystemService(INPUT_METHOD_SERVICE);
         manager.hideSoftInputFromWindow(mBinding.inputView.getWindowToken(), 0);
-
     }
 
     private void showSoftInputMethod() {

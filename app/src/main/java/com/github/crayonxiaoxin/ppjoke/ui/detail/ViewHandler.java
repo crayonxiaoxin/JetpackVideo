@@ -29,7 +29,7 @@ public abstract class ViewHandler {
     protected Feed mFeed;
     protected LayoutFeedDetailBottomInateractionBinding mInateractionBinding;
     protected FeedCommentAdapter listAdapter;
-    private CommentDialog commentDialog;
+    protected CommentDialog commentDialog;
 
     public ViewHandler(FragmentActivity activity) {
         mActivity = activity;
