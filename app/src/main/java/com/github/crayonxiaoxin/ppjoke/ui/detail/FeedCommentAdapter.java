@@ -1,6 +1,9 @@
 package com.github.crayonxiaoxin.ppjoke.ui.detail;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,6 +24,7 @@ import com.github.crayonxiaoxin.ppjoke.model.Comment;
 import com.github.crayonxiaoxin.ppjoke.ui.InteractionPresenter;
 import com.github.crayonxiaoxin.ppjoke.ui.MutableItemKeyedDataSource;
 import com.github.crayonxiaoxin.ppjoke.ui.login.UserManager;
+import com.github.crayonxiaoxin.ppjoke.ui.publish.PreviewActivity;
 
 public class FeedCommentAdapter extends AbsPagedListAdapter<Comment, FeedCommentAdapter.ViewHolder> {
     private Context mContext;
@@ -76,6 +80,14 @@ public class FeedCommentAdapter extends AbsPagedListAdapter<Comment, FeedComment
                         }
                     }
                 });
+            }
+        });
+        holder.mBinding.commentCover.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                boolean isVideo = item.commentType == Comment.COMMENT_TYPE_VIDEO;
+                Intent intent = PreviewActivity.intentActivityForResult((Activity) mContext, Uri.parse(isVideo ? item.videoUrl : item.imageUrl), isVideo, null);
+                mContext.startActivity(intent);
             }
         });
     }

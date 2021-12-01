@@ -2,12 +2,18 @@ package com.github.crayonxiaoxin.ppjoke.ui.detail;
 
 import static android.content.Context.INPUT_METHOD_SERVICE;
 
+import static com.github.crayonxiaoxin.ppjoke.ui.InteractionPresenter.showToast;
+
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.util.Log;
@@ -23,13 +29,21 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.FrameLayout;
 import android.widget.Toast;
 
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatDialogFragment;
 import androidx.arch.core.executor.ArchTaskExecutor;
 import androidx.fragment.app.DialogFragment;
+import androidx.lifecycle.Observer;
 
+import com.github.crayonxiaoxin.libcommon.dialog.LoadingDialog;
 import com.github.crayonxiaoxin.libcommon.global.AppGlobals;
+import com.github.crayonxiaoxin.libcommon.utils.FileUploadManager;
+import com.github.crayonxiaoxin.libcommon.utils.FileUtils;
 import com.github.crayonxiaoxin.libcommon.utils.PixUtils;
 import com.github.crayonxiaoxin.libcommon.utils.StatusBar;
 import com.github.crayonxiaoxin.libcommon.view.ViewHelper;
@@ -40,6 +54,9 @@ import com.github.crayonxiaoxin.ppjoke.R;
 import com.github.crayonxiaoxin.ppjoke.databinding.LayoutCommentDialogBinding;
 import com.github.crayonxiaoxin.ppjoke.model.Comment;
 import com.github.crayonxiaoxin.ppjoke.ui.login.UserManager;
+import com.github.crayonxiaoxin.ppjoke.ui.publish.CaptureActivity;
+
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class CommentDialog extends AppCompatDialogFragment implements View.OnClickListener {
     private LayoutCommentDialogBinding mBinding;
@@ -47,6 +64,12 @@ public class CommentDialog extends AppCompatDialogFragment implements View.OnCli
     private static final String KEY_ITEM_ID = "key_item_id";
     private long itemId;
     private CommentAddedListener mListener;
+    private Uri fileUri;
+    private int width, height;
+    private boolean isVideo = false;
+    private LoadingDialog loadingDialog;
+    private String fileUrl;
+    private String coverUrl;
 
     public static CommentDialog newInstance(long itemId) {
         Bundle args = new Bundle();
@@ -55,6 +78,13 @@ public class CommentDialog extends AppCompatDialogFragment implements View.OnCli
         fragment.setArguments(args);
         return fragment;
     }
+
+    private ActivityResultLauncher<Intent> activityResultLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
+        @Override
+        public void onActivityResult(ActivityResult result) {
+            CommentDialog.this.onActivityResult(result.getResultCode(), result.getData());
+        }
+    });
 
     @Nullable
     @Override
@@ -160,47 +190,138 @@ public class CommentDialog extends AppCompatDialogFragment implements View.OnCli
         if (id == R.id.comment_send) {
             publishComment();
         } else if (id == R.id.comment_video) {
-
+            activityResultLauncher.launch(CaptureActivity.intentActivityForResult(getActivity()));
         } else if (id == R.id.comment_delete) {
-
+            fileUri = null;
+            width = 0;
+            height = 0;
+            isVideo = false;
+            mBinding.commentCover.setImageDrawable(null);
+            mBinding.commentExtLayout.setVisibility(View.GONE);
+            mBinding.commentVideo.setEnabled(true);
+            mBinding.commentVideo.setAlpha(255);
         }
     }
 
     private void publishComment() {
         Editable editable = mBinding.inputView.getText();
         if (TextUtils.isEmpty(editable)) return;
-        String commentText = editable.toString();
+        if (isVideo && fileUri != null) {
+            FileUtils.generateVideoCover(getContext(), fileUri).observe(getViewLifecycleOwner(), new Observer<String>() {
+                @Override
+                public void onChanged(String coverPath) {
+                    if (!TextUtils.isEmpty(coverPath)) {
+                        uploadFile(coverPath, fileUri);
+                    }
+                }
+            });
+        } else if (fileUri != null) {
+            uploadFile(null, fileUri);
+        } else {
+            publish();
+        }
+    }
+
+    @SuppressLint("RestrictedApi")
+    private void uploadFile(String coverPath, Uri fileUri) {
+        showLoadingDialog();
+        AtomicInteger count = new AtomicInteger(1);
+        if (!TextUtils.isEmpty(coverPath)) {
+            count.set(2);
+            ArchTaskExecutor.getIOThreadExecutor().execute(new Runnable() {
+                @Override
+                public void run() {
+                    int remain = count.decrementAndGet();
+                    fileUrl = FileUploadManager.upload(coverPath);
+                    if (remain <= 0) {
+                        if (!TextUtils.isEmpty(fileUrl) || !TextUtils.isEmpty(coverUrl)) {
+                            publish();
+                        }
+                    } else {
+                        hideLoadingDialog();
+                        showToast(getString(R.string.file_upload_failed));
+                    }
+                }
+            });
+        }
+        ArchTaskExecutor.getIOThreadExecutor().execute(new Runnable() {
+            @Override
+            public void run() {
+                int remain = count.decrementAndGet();
+                fileUrl = FileUploadManager.upload(fileUri);
+                if (remain <= 0) {
+                    if (!TextUtils.isEmpty(fileUrl) || !TextUtils.isEmpty(coverPath) && !TextUtils.isEmpty(coverUrl)) {
+                        publish();
+                    }
+                } else {
+                    hideLoadingDialog();
+                    showToast(getString(R.string.file_upload_failed));
+                }
+            }
+        });
+    }
+
+    private void publish() {
+        String commentText = mBinding.inputView.getText().toString();
         ApiService.post(URL_ADD_COMMENT)
                 .addParam("userId", UserManager.get().getUserId())
                 .addParam("itemId", itemId)
                 .addParam("commentText", commentText)
-                .addParam("width", 0)
-                .addParam("height", 0)
-                .addParam("video_url", null)
-                .addParam("image_url", null)
+                .addParam("width", width)
+                .addParam("height", height)
+                .addParam("video_url", fileUrl)
+                .addParam("image_url", isVideo ? coverUrl : fileUrl)
                 .execute(new JsonCallback<Comment>() {
                     @Override
                     public void onSuccess(ApiResponse<Comment> response) {
                         onCommentSuccess(response.body);
+                        hideLoadingDialog();
                     }
 
                     @SuppressLint("RestrictedApi")
                     @Override
                     public void onError(ApiResponse<Comment> response) {
-                        ArchTaskExecutor.getMainThreadExecutor().execute(new Runnable() {
-                            @Override
-                            public void run() {
-                                Toast.makeText(AppGlobals.getApplication(), "评论失败：" + response.message, Toast.LENGTH_SHORT).show();
-                            }
-                        });
+                        showToast("评论失败：" + response.message);
+                        hideLoadingDialog();
                     }
                 });
+    }
 
+    private void showLoadingDialog() {
+        if (loadingDialog == null) {
+            loadingDialog = new LoadingDialog(getContext());
+        }
+        loadingDialog.setLoadingText(getString(R.string.upload_text));
+        loadingDialog.show();
+    }
+
+    private void hideLoadingDialog() {
+        if (loadingDialog != null) {
+            loadingDialog.dismiss();
+        }
     }
 
     private void onCommentSuccess(Comment body) {
         if (body != null && mListener != null) {
             mListener.onAddComment(body);
+        }
+    }
+
+    public void onActivityResult(int resultCode, Intent data) {
+        if (resultCode == Activity.RESULT_OK) {
+            fileUri = data.getParcelableExtra(CaptureActivity.RESULT_FILE_PATH);
+            width = data.getIntExtra(CaptureActivity.RESULT_FILE_WIDTH, 0);
+            height = data.getIntExtra(CaptureActivity.RESULT_FILE_HEIGHT, 0);
+            isVideo = data.getBooleanExtra(CaptureActivity.RESULT_FILE_TYPE, false);
+            if (fileUri != null) {
+                mBinding.commentExtLayout.setVisibility(View.VISIBLE);
+                mBinding.commentCover.setImageUri(fileUri);
+                if (isVideo) {
+                    mBinding.commentIconVideo.setVisibility(View.VISIBLE);
+                }
+            }
+            mBinding.commentVideo.setEnabled(false);
+            mBinding.commentVideo.setAlpha(80);
         }
     }
 

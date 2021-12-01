@@ -1,5 +1,6 @@
 package com.github.crayonxiaoxin.ppjoke.ui.detail;
 
+import android.content.Intent;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;

@@ -7,6 +7,10 @@ import java.io.Serializable;
 import java.util.Objects;
 
 public class Comment extends BaseObservable implements Serializable {
+
+    public static final int COMMENT_TYPE_VIDEO = 3;
+    public static final int COMMENT_TYPE_IMAGE_TEXT = 2;
+
     public Integer id;
     public Long itemId;
     public Long commentId;

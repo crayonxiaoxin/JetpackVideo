@@ -1,5 +1,9 @@
 package com.github.crayonxiaoxin.ppjoke.ui.detail;
 
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.view.WindowCompat;
 
@@ -16,6 +20,9 @@ import com.github.crayonxiaoxin.ppjoke.model.Feed;
 public class FeedDetailActivity extends AppCompatActivity {
     private static final String KEY_FEED = "key_feed";
     private static final String KEY_CATEGORY = "key_category";
+
+    private ViewHandler viewHandler;
+
 
     public static void startFeedDetailActivity(Context mContext, Feed item, String category) {
         Log.e("TAG", "startFeedDetailActivity: ");
@@ -35,7 +42,7 @@ public class FeedDetailActivity extends AppCompatActivity {
             finish();
             return;
         }
-        ViewHandler viewHandler = null;
+        viewHandler = null;
         if (feed.itemType == Feed.TYPE_IMAGE) {
             viewHandler = new ImageViewHandler(this);
         } else {

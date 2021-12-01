@@ -2,6 +2,7 @@ package com.github.crayonxiaoxin.ppjoke.ui.view;
 
 import android.content.Context;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.util.AttributeSet;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
@@ -45,6 +46,15 @@ public class PPImageView extends AppCompatImageView {
             builder.override(layoutParams.width, layoutParams.height);
         }
         builder.into(view);
+    }
+
+    public void setImageUri(Uri uri) {
+        RequestBuilder<Drawable> builder = Glide.with(this).load(uri);
+        ViewGroup.LayoutParams layoutParams = getLayoutParams();
+        if (layoutParams != null && layoutParams.width > 0 && layoutParams.height > 0) {
+            builder.override(layoutParams.width, layoutParams.height);
+        }
+        builder.into(this);
     }
 
     public void bindData(int widthPx, int heightPx, int marginLeft, String imageUrl) {
@@ -100,4 +110,6 @@ public class PPImageView extends AppCompatImageView {
                     }
                 });
     }
+
+
 }

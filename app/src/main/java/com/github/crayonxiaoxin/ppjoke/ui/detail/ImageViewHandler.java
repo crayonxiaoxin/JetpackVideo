@@ -1,5 +1,6 @@
 package com.github.crayonxiaoxin.ppjoke.ui.detail;
 
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 
@@ -51,4 +52,5 @@ public class ImageViewHandler extends ViewHandler {
             }
         });
     }
+
 }

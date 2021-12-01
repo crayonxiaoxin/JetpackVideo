@@ -315,7 +315,7 @@ public class InteractionPresenter {
     }
 
     @SuppressLint("RestrictedApi")
-    private static void showToast(String message) {
+    public static void showToast(String message) {
         ArchTaskExecutor.getMainThreadExecutor().execute(new Runnable() {
             @Override
             public void run() {
