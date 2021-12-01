@@ -115,11 +115,11 @@ public class RecordView extends View implements View.OnClickListener, View.OnLon
         int height = getHeight();
         if (isRecording) {
             canvas.drawCircle(width / 2f, height / 2f, width / 2f, fillPaint);
-            int left = 0;
-            int top = 0;
-            int right = width;
-            int bottom = height;
-            float sweepAngle = (progressValue / progressMaxValue) * 360;
+            int left = progressWidth / 2;
+            int top = progressWidth / 2;
+            int right = width - progressWidth / 2;
+            int bottom = height - progressWidth / 2;
+            float sweepAngle = (progressValue * 1f / progressMaxValue) * 360;
             canvas.drawArc(left, top, right, bottom, -90f, sweepAngle, false, progressPaint);
         } else {
             canvas.drawCircle(width / 2f, height / 2f, radius, fillPaint);

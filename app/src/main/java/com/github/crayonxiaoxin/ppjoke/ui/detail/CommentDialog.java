@@ -114,6 +114,7 @@ public class CommentDialog extends AppCompatDialogFragment implements View.OnCli
         window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_NOTHING);
 //        window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.MATCH_PARENT);
 
+        // 点击空白处隐藏
         window.getDecorView().setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View view, MotionEvent motionEvent) {
@@ -128,6 +129,9 @@ public class CommentDialog extends AppCompatDialogFragment implements View.OnCli
         FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.WRAP_CONTENT);
         layoutParams.gravity = Gravity.BOTTOM;
         mBinding.getRoot().setLayoutParams(layoutParams);
+        // 防止点击 frameLayout 隐藏
+        mBinding.getRoot().setClickable(true);
+        mBinding.getRoot().setFocusable(true);
 
         ViewHelper.setViewOutline(mBinding.getRoot(), PixUtils.dp2px(10), ViewHelper.RADIUS_TOP);
 
