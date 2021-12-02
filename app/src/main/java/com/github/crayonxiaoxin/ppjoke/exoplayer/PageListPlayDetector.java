@@ -34,6 +34,9 @@ public class PageListPlayDetector {
             @Override
             public void onStateChanged(@NonNull LifecycleOwner source, @NonNull Lifecycle.Event event) {
                 if (event == Lifecycle.Event.ON_DESTROY) {
+                    playingTarget = null;
+                    mTargets.clear();
+                    recyclerView.removeCallbacks(delayAutoPlay);
                     if (recyclerView.getAdapter() != null) {
                         recyclerView.getAdapter().unregisterAdapterDataObserver(mDataObserver);
                     }
@@ -54,12 +57,31 @@ public class PageListPlayDetector {
 
             @Override
             public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
-                if (playingTarget != null && playingTarget.isPlaying() && !isTargetInBounds(playingTarget)) {
-                    playingTarget.inActive();
+                if (dx == 0 && dy == 0) {
+                    //时序问题。当执行了AdapterDataObserver#onItemRangeInserted  可能还没有被布局到RecyclerView上。
+                    //所以此时 recyclerView.getChildCount()还是等于0的。
+                    //等 childView 被布局到RecyclerView上之后，会执行onScrolled（）方法
+                    postAutoPlay();
+                } else {
+                    if (playingTarget != null && playingTarget.isPlaying() && !isTargetInBounds(playingTarget)) {
+                        playingTarget.inActive();
+                    }
                 }
             }
         });
     }
+
+    private void postAutoPlay() {
+        // View.post 保证 runnable 在 view 的 attachedToWindow 和 detachedToWindow 期间调用
+        mRecyclerView.post(delayAutoPlay);
+    }
+
+    Runnable delayAutoPlay = new Runnable() {
+        @Override
+        public void run() {
+            autoPlay();
+        }
+    };
 
     private RecyclerView.AdapterDataObserver mDataObserver = new RecyclerView.AdapterDataObserver() {
         @Override
@@ -75,10 +97,10 @@ public class PageListPlayDetector {
         // 如果上一个 target 还满足条件（正在播放并且在屏幕内），则继续播放
         // 其实如果手动点击了播放按钮，那么 playingTarget 应该设置为对应的 target
         if (playingTarget != null && playingTarget.isPlaying() && isTargetInBounds(playingTarget)) {
-            Log.e("TAG", "autoPlay: old target" );
+            Log.e("TAG", "autoPlay: old target");
             return;
         }
-        Log.e("TAG", "autoPlay: new target" );
+        Log.e("TAG", "autoPlay: new target");
         // 否则，寻找新的符合要求的 target
         IPlayTarget activeTarget = null;
         for (IPlayTarget target : mTargets) {
