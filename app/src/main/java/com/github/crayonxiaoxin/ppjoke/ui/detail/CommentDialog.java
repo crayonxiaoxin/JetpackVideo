@@ -13,6 +13,7 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Looper;
 import android.os.Parcelable;
 import android.text.Editable;
 import android.text.TextUtils;
@@ -38,6 +39,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatDialogFragment;
 import androidx.arch.core.executor.ArchTaskExecutor;
 import androidx.fragment.app.DialogFragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.Observer;
 
 import com.github.crayonxiaoxin.libcommon.dialog.LoadingDialog;
@@ -196,15 +198,19 @@ public class CommentDialog extends AppCompatDialogFragment implements View.OnCli
         } else if (id == R.id.comment_video) {
             activityResultLauncher.launch(CaptureActivity.intentActivityForResult(getActivity()));
         } else if (id == R.id.comment_delete) {
-            fileUri = null;
-            width = 0;
-            height = 0;
-            isVideo = false;
-            mBinding.commentCover.setImageDrawable(null);
-            mBinding.commentExtLayout.setVisibility(View.GONE);
-            mBinding.commentVideo.setEnabled(true);
-            mBinding.commentVideo.setAlpha(255);
+            resetFile();
         }
+    }
+
+    private void resetFile() {
+        fileUri = null;
+        width = 0;
+        height = 0;
+        isVideo = false;
+        mBinding.commentCover.setImageDrawable(null);
+        mBinding.commentExtLayout.setVisibility(View.GONE);
+        mBinding.commentVideo.setEnabled(true);
+        mBinding.commentVideo.setAlpha(255);
     }
 
     private void publishComment() {
@@ -215,11 +221,13 @@ public class CommentDialog extends AppCompatDialogFragment implements View.OnCli
                 @Override
                 public void onChanged(String coverPath) {
                     if (!TextUtils.isEmpty(coverPath)) {
+                        Log.e("TAG", "onChanged: 1");
                         uploadFile(coverPath, fileUri);
                     }
                 }
             });
         } else if (fileUri != null) {
+            Log.e("TAG", "onChanged: 2");
             uploadFile(null, fileUri);
         } else {
             publish();
@@ -236,14 +244,15 @@ public class CommentDialog extends AppCompatDialogFragment implements View.OnCli
                 @Override
                 public void run() {
                     int remain = count.decrementAndGet();
-                    fileUrl = FileUploadManager.upload(coverPath);
+                    Log.e("TAG", "upload cover: " + coverPath);
+                    coverUrl = FileUploadManager.upload(coverPath);
                     if (remain <= 0) {
                         if (!TextUtils.isEmpty(fileUrl) || !TextUtils.isEmpty(coverUrl)) {
                             publish();
+                        } else {
+                            hideLoadingDialog();
+                            showToast(getString(R.string.file_upload_failed));
                         }
-                    } else {
-                        hideLoadingDialog();
-                        showToast(getString(R.string.file_upload_failed));
                     }
                 }
             });
@@ -256,11 +265,28 @@ public class CommentDialog extends AppCompatDialogFragment implements View.OnCli
                 if (remain <= 0) {
                     if (!TextUtils.isEmpty(fileUrl) || !TextUtils.isEmpty(coverPath) && !TextUtils.isEmpty(coverUrl)) {
                         publish();
+                    } else {
+                        hideLoadingDialog();
+                        showToast(getString(R.string.file_upload_failed));
                     }
-                } else {
-                    hideLoadingDialog();
-                    showToast(getString(R.string.file_upload_failed));
                 }
+            }
+        });
+    }
+
+    @Override
+    public void show(@NonNull FragmentManager manager, @Nullable String tag) {
+        super.show(manager, tag);
+//        resetAll();
+    }
+
+    @SuppressLint("RestrictedApi")
+    private void resetAll() {
+        ArchTaskExecutor.getMainThreadExecutor().execute(new Runnable() {
+            @Override
+            public void run() {
+                mBinding.inputView.setText("");
+                resetFile();
             }
         });
     }
@@ -273,13 +299,15 @@ public class CommentDialog extends AppCompatDialogFragment implements View.OnCli
                 .addParam("commentText", commentText)
                 .addParam("width", width)
                 .addParam("height", height)
-                .addParam("video_url", fileUrl)
+                .addParam("video_url", isVideo ? fileUrl : "")
                 .addParam("image_url", isVideo ? coverUrl : fileUrl)
                 .execute(new JsonCallback<Comment>() {
+                    @SuppressLint("RestrictedApi")
                     @Override
                     public void onSuccess(ApiResponse<Comment> response) {
                         onCommentSuccess(response.body);
                         hideLoadingDialog();
+                        resetAll();
                     }
 
                     @SuppressLint("RestrictedApi")
@@ -294,15 +322,32 @@ public class CommentDialog extends AppCompatDialogFragment implements View.OnCli
     private void showLoadingDialog() {
         if (loadingDialog == null) {
             loadingDialog = new LoadingDialog(getContext());
+            loadingDialog.setCanceledOnTouchOutside(false);
+            loadingDialog.setCancelable(false);
+            loadingDialog.setLoadingText(getString(R.string.upload_text));
         }
-        loadingDialog.setLoadingText(getString(R.string.upload_text));
-        loadingDialog.show();
+        if (!loadingDialog.isShowing()) {
+            loadingDialog.show();
+        }
     }
 
+    @SuppressLint("RestrictedApi")
     private void hideLoadingDialog() {
-        if (loadingDialog != null) {
-            loadingDialog.dismiss();
+        if (Looper.myLooper() == Looper.getMainLooper()) {
+            if (loadingDialog != null) {
+                loadingDialog.dismiss();
+            }
+        } else {
+            ArchTaskExecutor.getMainThreadExecutor().execute(new Runnable() {
+                @Override
+                public void run() {
+                    if (loadingDialog != null) {
+                        loadingDialog.dismiss();
+                    }
+                }
+            });
         }
+
     }
 
     private void onCommentSuccess(Comment body) {
