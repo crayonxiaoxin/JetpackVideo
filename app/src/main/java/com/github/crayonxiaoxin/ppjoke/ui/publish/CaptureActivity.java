@@ -43,7 +43,6 @@ import java.util.ArrayList;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
-@ActivityDestination(pageUrl = "main/tabs/publish")
 public class CaptureActivity extends AppCompatActivity {
 
     private ActivityCaptureBinding mBinding;
