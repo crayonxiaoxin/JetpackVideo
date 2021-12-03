@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <variable
+            name="feed"
+            type="com.github.crayonxiaoxin.ppjoke.model.Feed" />
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <include
+            layout="@layout/layout_feed_text"
+            app:feedText="@{feed.feedsText}"
+            app:lines="@{1000}" />
+
+        <include
+            layout="@layout/layout_feed_tag"
+            app:tagText="@{feed.activityText}" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_10"
+            android:background="@color/color_gray2" />
+
+    </LinearLayout>
+</layout>

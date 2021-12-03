@@ -22,6 +22,7 @@ public class HomeFragment extends AbsListFragment<Feed, HomeViewModel> {
 
     private PageListPlayDetector playDetector;
     private String feedType;
+    private boolean shouldPause = true;
 
     public static HomeFragment newInstance(String feedType) {
         HomeFragment fragment = new HomeFragment();
@@ -62,6 +63,12 @@ public class HomeFragment extends AbsListFragment<Feed, HomeViewModel> {
                     playDetector.removeTarget(holder.getListPlayerView());
                 }
             }
+
+            @Override
+            public void onStartFeedDetailActivity(Feed feed) { // onPause时，是否需要暂停视频的播放（无缝续播）
+                boolean isVideo = feed.itemType == Feed.TYPE_VIDEO;
+                shouldPause = !isVideo;
+            }
         };
     }
 
@@ -89,12 +96,17 @@ public class HomeFragment extends AbsListFragment<Feed, HomeViewModel> {
 
     @Override
     public void onPause() {
-        playDetector.onPause();
+        // 如果跳转到详情页，就不需要暂停
+        if (shouldPause) {
+            playDetector.onPause();
+        }
         super.onPause();
     }
 
     @Override
     public void onResume() {
+        super.onResume();
+        shouldPause = true;
         // 防止从后台切换时，多个 fragment 同时播放
         if (getParentFragment() != null) {
             if (getParentFragment().isVisible() && isVisible()) {
@@ -105,7 +117,6 @@ public class HomeFragment extends AbsListFragment<Feed, HomeViewModel> {
                 playDetector.onResume();
             }
         }
-        super.onResume();
     }
 
     @Override

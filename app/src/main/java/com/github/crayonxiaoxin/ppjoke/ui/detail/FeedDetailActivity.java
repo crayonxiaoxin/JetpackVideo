@@ -1,25 +1,18 @@
 package com.github.crayonxiaoxin.ppjoke.ui.detail;
 
-import androidx.activity.result.ActivityResult;
-import androidx.activity.result.ActivityResultCallback;
-import androidx.activity.result.ActivityResultLauncher;
-import androidx.activity.result.contract.ActivityResultContracts;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.view.WindowCompat;
-
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.util.Log;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.github.crayonxiaoxin.libcommon.utils.StatusBar;
-import com.github.crayonxiaoxin.ppjoke.R;
 import com.github.crayonxiaoxin.ppjoke.model.Feed;
 
 public class FeedDetailActivity extends AppCompatActivity {
-    private static final String KEY_FEED = "key_feed";
-    private static final String KEY_CATEGORY = "key_category";
+    public static final String KEY_FEED = "key_feed";
+    public static final String KEY_CATEGORY = "key_category";
 
     private ViewHandler viewHandler;
 
@@ -49,5 +42,29 @@ public class FeedDetailActivity extends AppCompatActivity {
             viewHandler = new VideoViewHandler(this);
         }
         viewHandler.bindInitData(feed);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        if (viewHandler != null) {
+            viewHandler.onPause();
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (viewHandler != null) {
+            viewHandler.onResume();
+        }
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (viewHandler != null) {
+            viewHandler.onBackPressed();
+        }
+        super.onBackPressed();
     }
 }

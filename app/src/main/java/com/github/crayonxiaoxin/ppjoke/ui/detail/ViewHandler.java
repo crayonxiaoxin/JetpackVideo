@@ -98,4 +98,14 @@ public abstract class ViewHandler {
             }
         }
     }
+
+    public void onPause() {
+
+    }
+
+    public void onResume() {
+    }
+
+    public void onBackPressed() {
+    }
 }

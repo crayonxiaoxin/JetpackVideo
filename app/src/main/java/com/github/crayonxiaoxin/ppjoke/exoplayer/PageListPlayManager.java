@@ -18,6 +18,11 @@ import com.google.android.exoplayer2.util.Util;
 
 import java.util.HashMap;
 
+/**
+ * 能适应多个页面视频播放的 播放器管理者
+ * 每个页面一个播放器
+ * 方便管理每个页面的暂停/恢复操作
+ */
 public class PageListPlayManager {
     private static HashMap<String, PageListPlay> sPageListPlayHashMap = new HashMap<>();
 

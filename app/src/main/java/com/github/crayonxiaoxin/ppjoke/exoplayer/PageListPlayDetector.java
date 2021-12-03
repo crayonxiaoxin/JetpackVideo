@@ -86,7 +86,7 @@ public class PageListPlayDetector {
     private RecyclerView.AdapterDataObserver mDataObserver = new RecyclerView.AdapterDataObserver() {
         @Override
         public void onItemRangeInserted(int positionStart, int itemCount) {
-            autoPlay();
+            postAutoPlay();
         }
     };
 

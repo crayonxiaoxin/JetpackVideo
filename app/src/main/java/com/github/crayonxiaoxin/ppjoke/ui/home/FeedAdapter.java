@@ -1,9 +1,6 @@
 package com.github.crayonxiaoxin.ppjoke.ui.home;
 
-import static com.github.crayonxiaoxin.ppjoke.BR.feed;
-
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -73,6 +70,7 @@ class FeedAdapter extends PagedListAdapter<Feed, FeedAdapter.ViewHolder> {
             @Override
             public void onClick(View view) {
                 FeedDetailActivity.startFeedDetailActivity(mContext, item, mCategory);
+                onStartFeedDetailActivity(item);
                 if (mFeedObserver == null) { // 没有的时候才注册
                     mFeedObserver = new FeedObserver();
                     // 先注册 observer，监听详情页数据改变
@@ -82,6 +80,10 @@ class FeedAdapter extends PagedListAdapter<Feed, FeedAdapter.ViewHolder> {
                 mFeedObserver.setFeed(item); // 每次点击的数据
             }
         });
+    }
+
+    public void onStartFeedDetailActivity(Feed feed) {
+
     }
 
     private FeedObserver mFeedObserver;

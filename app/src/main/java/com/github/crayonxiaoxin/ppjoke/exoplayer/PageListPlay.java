@@ -1,6 +1,7 @@
 package com.github.crayonxiaoxin.ppjoke.exoplayer;
 
 import android.app.Application;
+import android.util.Log;
 import android.view.LayoutInflater;
 
 import com.github.crayonxiaoxin.libcommon.global.AppGlobals;
@@ -49,6 +50,20 @@ public class PageListPlay {
             controllerView.setPlayer(null);
 //            controllerView.removeVisibilityListener();
             controllerView = null;
+        }
+    }
+
+    public void switchPlayerView(PlayerView newPlayerView, boolean attach) {
+        if (attach) {
+            // 停止旧播放器的关联
+            this.playerView.setPlayer(null);
+            // 给传递进来的 playerView 配置播放器
+            newPlayerView.setPlayer(this.exoPlayer);
+        } else {
+            // 恢复旧播放器的关联
+            this.playerView.setPlayer(this.exoPlayer);
+            // 停止新播放器的关联
+            newPlayerView.setPlayer(null);
         }
     }
 }

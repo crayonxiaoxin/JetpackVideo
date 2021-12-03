@@ -12,6 +12,7 @@
         <entry key="app/src/main/res/drawable/splash.xml" value="0.2740740740740741" />
         <entry key="app/src/main/res/layout/activity_capture.xml" value="0.19739583333333333" />
         <entry key="app/src/main/res/layout/activity_feed_detail_type_image.xml" value="0.19021739130434784" />
+        <entry key="app/src/main/res/layout/activity_feed_detail_type_video.xml" value="0.1" />
         <entry key="app/src/main/res/layout/activity_layout_login.xml" value="0.10416666666666667" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.1" />
         <entry key="app/src/main/res/layout/activity_preview.xml" value="0.19739583333333333" />
@@ -31,6 +32,7 @@
         <entry key="app/src/main/res/layout/layout_feed_detail_author_info.xml" value="0.33" />
         <entry key="app/src/main/res/layout/layout_feed_detail_bottom_inateraction.xml" value="0.19021739130434784" />
         <entry key="app/src/main/res/layout/layout_feed_detail_type_image_header.xml" value="0.19021739130434784" />
+        <entry key="app/src/main/res/layout/layout_feed_detail_type_video_header.xml" value="0.20380434782608695" />
         <entry key="app/src/main/res/layout/layout_feed_interaction.xml" value="0.1" />
         <entry key="app/src/main/res/layout/layout_feed_tag.xml" value="0.5" />
         <entry key="app/src/main/res/layout/layout_feed_text.xml" value="0.1793478260869565" />

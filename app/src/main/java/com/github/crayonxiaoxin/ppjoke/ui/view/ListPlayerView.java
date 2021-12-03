@@ -3,6 +3,7 @@ package com.github.crayonxiaoxin.ppjoke.ui.view;
 import android.content.Context;
 import android.text.TextUtils;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -28,13 +29,15 @@ import com.google.android.exoplayer2.ui.PlayerControlView;
 import com.google.android.exoplayer2.ui.PlayerView;
 
 public class ListPlayerView extends FrameLayout implements IPlayTarget, PlayerControlView.VisibilityListener, Player.Listener {
-    private PPImageView blurView;
-    private PPImageView cover;
-    private ImageView playBtn;
-    private ProgressBar bufferView;
-    private String mCategory;
-    private String mVideoUrl;
-    private boolean isPlaying = false;
+    protected PPImageView blurView;
+    protected PPImageView cover;
+    protected ImageView playBtn;
+    protected ProgressBar bufferView;
+    protected String mCategory;
+    protected int mWidthPx;
+    protected int mHeightPx;
+    protected String mVideoUrl;
+    protected boolean isPlaying = false;
 
     public ListPlayerView(@NonNull Context context) {
         this(context, null);
@@ -45,7 +48,12 @@ public class ListPlayerView extends FrameLayout implements IPlayTarget, PlayerCo
     }
 
     public ListPlayerView(@NonNull Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
-        super(context, attrs, defStyleAttr);
+        this(context, attrs, defStyleAttr, 0);
+
+    }
+
+    public ListPlayerView(@NonNull Context context, @Nullable AttributeSet attrs, int defStyleAttr, int defStyleRes) {
+        super(context, attrs, defStyleAttr, defStyleRes);
         LayoutInflater.from(context).inflate(R.layout.layout_player_view, this, true);
         blurView = findViewById(R.id.blur_background);
         cover = findViewById(R.id.cover);
@@ -72,6 +80,8 @@ public class ListPlayerView extends FrameLayout implements IPlayTarget, PlayerCo
 
     public void bindData(String category, int widthPx, int HeightPx, String coverUrl, String videoUrl) {
         mCategory = category;
+        mWidthPx = widthPx;
+        mHeightPx = HeightPx;
         mVideoUrl = videoUrl;
         PPImageView.setImageUrl(cover, coverUrl, false);
         if (widthPx < HeightPx) {
@@ -137,6 +147,7 @@ public class ListPlayerView extends FrameLayout implements IPlayTarget, PlayerCo
         if (playerView == null) {
             return;
         }
+        pageListPlay.switchPlayerView(playerView, true);
 
         ViewParent parent = playerView.getParent();
         if (parent != this) { // 如果 playerView 父容器不是 this
@@ -211,15 +222,22 @@ public class ListPlayerView extends FrameLayout implements IPlayTarget, PlayerCo
 
     @Override
     public void onPlayerStateChanged(boolean playWhenReady, int playbackState) {
+        Log.e("TAG", "onPlayerStateChanged: " + playWhenReady + " " + playbackState);
         PageListPlay pageListPlay = PageListPlayManager.get(mCategory);
         ExoPlayer exoPlayer = pageListPlay.exoPlayer;
         if (playbackState == Player.STATE_READY && exoPlayer.getBufferedPosition() != 0 && playWhenReady) {
-            cover.setVisibility(INVISIBLE);
-            bufferView.setVisibility(INVISIBLE);
+            cover.setVisibility(GONE);
+            Log.e("TAG", "onPlayerStateChanged: " + (cover.getVisibility() == GONE));
+            bufferView.setVisibility(GONE);
         } else if (playbackState == Player.STATE_BUFFERING) {
             bufferView.setVisibility(VISIBLE);
         }
         isPlaying = playbackState == Player.STATE_READY && exoPlayer.getBufferedPosition() != 0 && playWhenReady;
         playBtn.setImageResource(isPlaying ? R.drawable.icon_video_pause : R.drawable.icon_video_play);
+    }
+
+    public PlayerControlView getPlayerControllerView() {
+        PageListPlay pageListPlay = PageListPlayManager.get(mCategory);
+        return pageListPlay.controllerView;
     }
 }
