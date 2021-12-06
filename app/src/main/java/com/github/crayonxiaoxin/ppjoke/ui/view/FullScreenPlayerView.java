@@ -67,7 +67,7 @@ public class FullScreenPlayerView extends ListPlayerView {
 
     @Override
     public void setLayoutParams(ViewGroup.LayoutParams params) {
-        if (mWidthPx > mHeightPx) {
+        if (mWidthPx < mHeightPx) {
             int layoutWidth = params.width;
             int layoutHeight = params.height;
             ViewGroup.LayoutParams coverParams = cover.getLayoutParams();

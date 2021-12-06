@@ -1,8 +1,10 @@
 package com.github.crayonxiaoxin.ppjoke.ui.detail;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.databinding.DataBindingUtil;
@@ -38,6 +40,7 @@ public class VideoViewHandler extends ViewHandler {
             @Override
             public void onClick(View v) {
                 mActivity.finish();
+                Toast.makeText(mActivity, "close", Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -49,7 +52,11 @@ public class VideoViewHandler extends ViewHandler {
                 int bottom = playerView.getBottom();
                 boolean moveUp = height < bottom;
                 int inputHeight = mInateractionBinding.getRoot().getMeasuredHeight();
-                boolean fullscreen = moveUp ? height >= inputHeight : height >= coordinator.getBottom();
+                boolean fullscreen = !moveUp ? height >= coordinator.getBottom() - inputHeight - 2 : height >= coordinator.getBottom() - 2;
+//                Log.e("TAG", "onDragZoom: fullscreen = " + fullscreen + " , up = " + moveUp);
+//                Log.e("TAG", "onDragZoom: height = " + height);
+//                Log.e("TAG", "onDragZoom: coordinator bottom = " + coordinator.getBottom());
+//                Log.e("TAG", "onDragZoom: inputHeight = " + inputHeight);
                 setViewAppearance(fullscreen);
             }
         });
@@ -68,8 +75,12 @@ public class VideoViewHandler extends ViewHandler {
             @Override
             public void run() {
                 // 是否正在进行视频的全屏展示
-                boolean fullscreen = mVideoBinding.playerView.getBottom() >= mVideoBinding.coordinator.getBottom();
+//                boolean fullscreen = mVideoBinding.playerView.getBottom() >= mVideoBinding.coordinator.getBottom() - 2;
+                boolean fullscreen = mVideoBinding.playerView.getBottom() >= mVideoBinding.coordinator.getBottom() - mVideoBinding.bottomInteraction.getRoot().getMeasuredHeight() - 2;
                 setViewAppearance(fullscreen);
+                Log.e("TAG", "onDragZoom: fullscreen = " + fullscreen);
+                Log.e("TAG", "onDragZoom: height = " + mVideoBinding.playerView.getBottom());
+                Log.e("TAG", "onDragZoom: coordinator bottom = " + coordinator.getBottom());
             }
         });
 
@@ -80,6 +91,7 @@ public class VideoViewHandler extends ViewHandler {
 
     private void setViewAppearance(boolean fullscreen) {
         mVideoBinding.setFullscreen(fullscreen);
+        mInateractionBinding.setFullscreen(fullscreen);
         // 如果是全屏播放，显示顶部的用户信息
         mVideoBinding.fullscreenAuthorInfo.getRoot().setVisibility(fullscreen ? View.VISIBLE : View.GONE);
         // 如果是全屏播放，改变 controller 的位置

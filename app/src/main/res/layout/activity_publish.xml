@@ -1,16 +1,151 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/app_name"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+    <data>
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/color_white">
+
+        <RelativeLayout
+            android:id="@+id/top_bar"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_48"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <ImageView
+                android:id="@+id/action_close"
+                android:layout_width="@dimen/dp_45"
+                android:layout_height="@dimen/dp_45"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="@dimen/dp_16"
+                android:padding="@dimen/dp_10"
+                android:src="@drawable/icon_close" />
+
+            <TextView
+                android:id="@+id/title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:gravity="center"
+                android:text="@string/publish_title"
+                android:textColor="@color/color_000"
+                android:textSize="@dimen/sp_16" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/action_publish"
+                android:layout_width="70dp"
+                android:layout_height="@dimen/dp_30"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="15dp"
+                android:backgroundTint="@color/color_theme"
+                android:text="@string/publich_button"
+                android:textColor="@color/color_white"
+                app:cornerRadius="@dimen/dp_16" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_alignParentBottom="true"
+                android:background="@color/color_gray2" />
+        </RelativeLayout>
+
+        <EditText
+            android:id="@+id/input_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="top"
+            android:background="@color/color_white"
+            android:hint="@string/publish_edit_hint"
+            android:maxLines="1000"
+            android:minHeight="100dp"
+            android:padding="@dimen/dp_16"
+            android:textColor="@color/color_000"
+            android:textColorHint="@color/color_999"
+            android:textSize="@dimen/sp_14"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/top_bar" />
+
+        <View
+            android:id="@+id/input_line"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/color_gray2"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/input_view" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/action_add_tag"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/dp_25"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="@dimen/dp_16"
+            android:layout_marginTop="@dimen/dp_16"
+            android:backgroundTint="@color/color_white"
+            android:gravity="center"
+            android:paddingVertical="0dp"
+            android:text="@string/publish_add_tag"
+            android:textColor="@color/color_theme"
+            android:textSize="@dimen/sp_14"
+            android:textStyle="bold"
+            app:cornerRadius="@dimen/dp_13"
+            app:icon="@drawable/ic_add_club"
+            app:iconGravity="textEnd"
+            app:iconTint="@color/color_theme"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/input_line"
+            app:strokeColor="@color/color_theme"
+            app:strokeWidth="@dimen/dp_1" />
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/action_add_file"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:layout_marginLeft="@dimen/dp_16"
+            android:layout_marginTop="@dimen/dp_16"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/action_add_tag"
+            app:srcCompat="@drawable/ic_add_file"
+            app:tint="@color/color_theme" />
+
+        <FrameLayout
+            android:id="@+id/file_container"
+            android:layout_width="120dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/dp_16"
+            android:layout_marginTop="@dimen/dp_16"
+            android:visibility="gone"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/action_add_tag">
+
+            <com.github.crayonxiaoxin.ppjoke.ui.view.PPImageView
+                android:id="@+id/cover"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <ImageView
+                android:id="@+id/play_btn"
+                android:layout_width="@dimen/dp_30"
+                android:layout_height="@dimen/dp_30"
+                android:layout_gravity="center"
+                android:src="@drawable/icon_video_play" />
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/action_delete_file"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end|top"
+                android:paddingLeft="16dp"
+                app:srcCompat="@drawable/icon_close"
+                app:tint="@color/color_white" />
+        </FrameLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

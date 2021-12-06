@@ -3,6 +3,7 @@ package com.github.crayonxiaoxin.ppjoke.ui.detail;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +13,7 @@ import androidx.annotation.NonNull;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.core.view.ViewCompat;
 import androidx.customview.widget.ViewDragHelper;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.github.crayonxiaoxin.libcommon.utils.PixUtils;
 import com.github.crayonxiaoxin.ppjoke.R;
@@ -41,23 +43,36 @@ public class ViewZoomBehavior extends CoordinatorLayout.Behavior<FullScreenPlaye
 
     @Override
     public boolean onLayoutChild(@NonNull CoordinatorLayout parent, @NonNull FullScreenPlayerView child, int layoutDirection) {
-        if (viewDragHelper == null) {
+        if (viewDragHelper == null ) {
             viewDragHelper = ViewDragHelper.create(parent, 1.0f, mCallback);
             scrollingView = parent.findViewById(scrollingId);
-            refChild = child;
+            refChild = (FullScreenPlayerView) child;
             childOriginalHeight = child.getMeasuredHeight();
             canFullscreen = childOriginalHeight > parent.getMeasuredWidth();
+            Log.e("TAG", "onLayoutChild: childOriginalHeight" + childOriginalHeight + " " + parent.getMeasuredWidth());
         }
         return super.onLayoutChild(parent, child, layoutDirection);
     }
 
+    private FlingRunnable runnable;
     private ViewDragHelper.Callback mCallback = new ViewDragHelper.Callback() {
         // 告诉 ViewDragHelper 什么时候可以拦截 手指触摸的这个view的手势分发
         @Override
         public boolean tryCaptureView(@NonNull View child, int pointerId) {
-            if (canFullscreen && refChild.getBottom() >= minHeight) {
-                return true;
+            if (!canFullscreen) return false;
+            if (runnable != null) {
+                refChild.removeCallbacks(runnable);
             }
+            int refChildBottom = refChild.getBottom();
+            if (child == refChild) {
+                Log.e("TAG", "tryCaptureView: 1");
+                return refChildBottom >= minHeight && refChildBottom <= childOriginalHeight;
+            }
+            if (child == scrollingView) {
+                Log.e("TAG", "tryCaptureView: 2");
+                return refChildBottom != minHeight && refChildBottom != childOriginalHeight;
+            }
+            Log.e("TAG", "tryCaptureView: 3");
             return false;
         }
 
@@ -77,9 +92,9 @@ public class ViewZoomBehavior extends CoordinatorLayout.Behavior<FullScreenPlaye
             // dy<0 代表手指从屏幕下方往上方滑动
 
             // 手指从下往上滑动。refChild 的底部不能小于 minHeight
-            if ((dy < 0 && refChild.getBottom() < minHeight)
+            if ((dy < 0 && refChild.getBottom() <= minHeight)
                     // 手指从上往下滑动。refChild 的底部不能超过 childOriginalHeight
-                    || (dy > 0 && refChild.getBottom() > childOriginalHeight)
+                    || (dy > 0 && refChild.getBottom() >= childOriginalHeight)
                     // 手指从上往下滑动。如果 scrollingView 还没滑动到顶部。此时滑动事件应该交由列表处理
                     || (dy > 0 && (scrollingView != null && scrollingView.canScrollVertically(-1)))
             ) {
@@ -119,8 +134,8 @@ public class ViewZoomBehavior extends CoordinatorLayout.Behavior<FullScreenPlaye
             super.onViewReleased(releasedChild, xvel, yvel);
             if (refChild.getBottom() > minHeight && refChild.getBottom() < childOriginalHeight && yvel != 0) {
                 // 惯性滑动
-                FlingRunnable flingRunnable = new FlingRunnable(refChild);
-                flingRunnable.fling((int) xvel, (int) yvel);
+                runnable = new FlingRunnable(refChild);
+                runnable.fling((int) xvel, (int) yvel);
             }
         }
 
@@ -129,8 +144,10 @@ public class ViewZoomBehavior extends CoordinatorLayout.Behavior<FullScreenPlaye
     @Override
     public boolean onTouchEvent(@NonNull CoordinatorLayout parent, @NonNull FullScreenPlayerView child, @NonNull MotionEvent ev) {
         if (!canFullscreen || viewDragHelper == null) {
+            Log.e("TAG", "onTouchEvent: 1");
             return super.onTouchEvent(parent, child, ev);
         }
+        Log.e("TAG", "onTouchEvent: 2 "+child.getClass());
         viewDragHelper.processTouchEvent(ev);
         return true;
     }
@@ -138,8 +155,10 @@ public class ViewZoomBehavior extends CoordinatorLayout.Behavior<FullScreenPlaye
     @Override
     public boolean onInterceptTouchEvent(@NonNull CoordinatorLayout parent, @NonNull FullScreenPlayerView child, @NonNull MotionEvent ev) {
         if (!canFullscreen || viewDragHelper == null) {
+            Log.e("TAG", "onInterceptTouchEvent: 1");
             return super.onInterceptTouchEvent(parent, child, ev);
         }
+        Log.e("TAG", "onInterceptTouchEvent: 2");
         viewDragHelper.shouldInterceptTouchEvent(ev);
         return true;
     }

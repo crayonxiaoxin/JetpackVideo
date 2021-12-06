@@ -80,4 +80,8 @@ dependencies {
 
     api 'com.aliyun.dpa:oss-android-sdk:+'
 
+    def work_version = "2.7.1"
+    // (Java only)
+    api "androidx.work:work-runtime:$work_version"
+
 }

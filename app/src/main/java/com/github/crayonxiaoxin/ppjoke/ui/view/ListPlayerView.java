@@ -107,8 +107,8 @@ public class ListPlayerView extends FrameLayout implements IPlayTarget, PlayerCo
             coverWidth = maxWidth;
             layoutHeight = coverHeight = (int) (heightPx / (widthPx * 1.0f / maxWidth));
         } else {
-            coverHeight = maxHeight;
-            layoutWidth = coverWidth = (int) (widthPx / (heightPx * 1.0f / maxHeight));
+            layoutHeight = coverHeight = maxHeight;
+            coverWidth = (int) (widthPx / (heightPx * 1.0f / maxHeight));
         }
 
         ViewGroup.LayoutParams layoutParams = getLayoutParams();

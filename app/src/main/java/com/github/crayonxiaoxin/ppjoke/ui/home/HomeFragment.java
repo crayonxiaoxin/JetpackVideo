@@ -3,6 +3,7 @@ package com.github.crayonxiaoxin.ppjoke.ui.home;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.lifecycle.Observer;
 import androidx.paging.ItemKeyedDataSource;
 import androidx.paging.PagedList;
@@ -68,6 +69,16 @@ public class HomeFragment extends AbsListFragment<Feed, HomeViewModel> {
             public void onStartFeedDetailActivity(Feed feed) { // onPause时，是否需要暂停视频的播放（无缝续播）
                 boolean isVideo = feed.itemType == Feed.TYPE_VIDEO;
                 shouldPause = !isVideo;
+            }
+
+            @Override
+            public void onCurrentListChanged(@Nullable PagedList<Feed> previousList, @Nullable PagedList<Feed> currentList) {
+                // 这个方法是每提交一次 pagedList 都会触发
+                if (previousList != null && currentList != null) {
+                    if (!currentList.containsAll(previousList)) {
+                        mRecyclerView.scrollToPosition(0);
+                    }
+                }
             }
         };
     }
