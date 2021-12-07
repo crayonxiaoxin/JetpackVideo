@@ -51,6 +51,7 @@
             android:theme="@style/capture" />
         <activity android:name=".ui.publish.PreviewActivity" />
         <activity android:name=".ui.publish.PublishActivity" />
+        <activity android:name=".ui.find.TagFeedListActivity" />
         <activity android:name=".ui.login.LoginActivity" />
         <activity
             android:name="com.tencent.tauth.AuthActivity"

@@ -29,7 +29,7 @@ import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 
 public abstract class AbsListFragment<T, M extends AbsViewModal<T>> extends Fragment implements OnRefreshListener, OnLoadMoreListener {
-    private LayoutRefreshViewBinding binding;
+    protected LayoutRefreshViewBinding binding;
     protected PagedListAdapter<T, RecyclerView.ViewHolder> adapter;
     protected M mViewModel;
     protected RecyclerView mRecyclerView;
@@ -37,6 +37,27 @@ public abstract class AbsListFragment<T, M extends AbsViewModal<T>> extends Frag
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+
+        ParameterizedType type = (ParameterizedType) getClass().getGenericSuperclass();
+        Type[] args = type.getActualTypeArguments();
+        if (args.length > 1) { //viewModal 位于泛型第2个
+            Type arg = args[1];
+            Class a = ((Class) arg).asSubclass(AbsViewModal.class);
+            mViewModel = (M) new ViewModelProvider(this).get(a);
+            mViewModel.getPageData().observe(getViewLifecycleOwner(), new Observer<PagedList<T>>() {
+                @Override
+                public void onChanged(PagedList<T> pagedList) {
+                    submitList(pagedList);
+                }
+            });
+            mViewModel.getBoundaryPageData().observe(getViewLifecycleOwner(), new Observer<Boolean>() {
+                @Override
+                public void onChanged(Boolean hasData) {
+                    finishRefresh(hasData);
+                }
+            });
+        }
+
         binding = LayoutRefreshViewBinding.inflate(inflater, container, false);
 
         binding.refreshLayout.setEnableRefresh(true);
@@ -61,7 +82,7 @@ public abstract class AbsListFragment<T, M extends AbsViewModal<T>> extends Frag
     public void submitList(PagedList<T> pagedList) {
         if (pagedList != null && pagedList.size() > 0) {
             adapter.submitList(pagedList);
-            finishRefresh(true);
+            finishRefresh(pagedList.size() > 0);
         }
     }
 
@@ -77,30 +98,12 @@ public abstract class AbsListFragment<T, M extends AbsViewModal<T>> extends Frag
         binding.emptyView.setVisibility(hasData ? View.GONE : View.VISIBLE);
     }
 
-    public abstract PagedListAdapter<T, RecyclerView.ViewHolder> getAdapter();
+    public abstract PagedListAdapter getAdapter();
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        ParameterizedType type = (ParameterizedType) getClass().getGenericSuperclass();
-        Type[] args = type.getActualTypeArguments();
-        if (args.length > 1) { //viewModal 位于泛型第2个
-            Type arg = args[1];
-            Class a = ((Class) arg).asSubclass(AbsViewModal.class);
-            mViewModel = (M) new ViewModelProvider(this).get(a);
-            mViewModel.getPageData().observe(getViewLifecycleOwner(), new Observer<PagedList<T>>() {
-                @Override
-                public void onChanged(PagedList<T> pagedList) {
-                    submitList(pagedList);
-                }
-            });
-            mViewModel.getBoundaryPageData().observe(getViewLifecycleOwner(), new Observer<Boolean>() {
-                @Override
-                public void onChanged(Boolean hasData) {
-                    finishRefresh(hasData);
-                }
-            });
-        }
+
         afterCreateView();
     }
 }

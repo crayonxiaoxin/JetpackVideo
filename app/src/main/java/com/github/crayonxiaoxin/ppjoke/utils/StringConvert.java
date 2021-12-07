@@ -7,4 +7,11 @@ public class StringConvert {
         }
         return count / 10000 + "万";
     }
+
+    public static String convertTagFeedList(int count) {
+        if (count < 1_0000) {
+            return String.valueOf(count) + "人观看";
+        }
+        return count / 10000 + "万人观看";
+    }
 }

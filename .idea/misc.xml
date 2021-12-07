@@ -17,6 +17,7 @@
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.1" />
         <entry key="app/src/main/res/layout/activity_preview.xml" value="0.19739583333333333" />
         <entry key="app/src/main/res/layout/activity_publish.xml" value="0.25" />
+        <entry key="app/src/main/res/layout/activity_tag_feed_list.xml" value="0.18072916666666666" />
         <entry key="app/src/main/res/layout/fragment_dashboard.xml" value="0.13858695652173914" />
         <entry key="app/src/main/res/layout/fragment_find.xml" value="0.1466565349544073" />
         <entry key="app/src/main/res/layout/fragment_home.xml" value="0.15896739130434784" />
@@ -47,6 +48,8 @@
         <entry key="app/src/main/res/layout/layout_simple_exo_player_controller_view.xml" value="0.196875" />
         <entry key="app/src/main/res/layout/layout_simple_exo_player_view.xml" value="0.196875" />
         <entry key="app/src/main/res/layout/layout_tag_bottom_sheet_dialog.xml" value="0.20244565217391305" />
+        <entry key="app/src/main/res/layout/layout_tag_feed_list_header.xml" value="0.18072916666666666" />
+        <entry key="app/src/main/res/layout/layout_tag_list_item.xml" value="0.25" />
         <entry key="app/src/main/res/menu/bottom_nav_menu.xml" value="0.16197916666666667" />
         <entry key="libcommon/src/main/res/layout/layout_empty_view.xml" value="0.1743659420289855" />
         <entry key="libcommon/src/main/res/layout/layout_loading_view.xml" value="0.19739583333333333" />

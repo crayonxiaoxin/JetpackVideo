@@ -14,6 +14,7 @@ import androidx.paging.PagedListAdapter;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.github.crayonxiaoxin.libcommon.extension.AbsPagedListAdapter;
 import com.github.crayonxiaoxin.libcommon.extension.LiveDataBus;
 import com.github.crayonxiaoxin.ppjoke.BR;
 import com.github.crayonxiaoxin.ppjoke.databinding.LayoutFeedTypeImageBinding;
@@ -23,7 +24,7 @@ import com.github.crayonxiaoxin.ppjoke.ui.InteractionPresenter;
 import com.github.crayonxiaoxin.ppjoke.ui.detail.FeedDetailActivity;
 import com.github.crayonxiaoxin.ppjoke.ui.view.ListPlayerView;
 
-class FeedAdapter extends PagedListAdapter<Feed, FeedAdapter.ViewHolder> {
+public class FeedAdapter extends AbsPagedListAdapter<Feed, FeedAdapter.ViewHolder> {
     private final LayoutInflater mInflater;
     private String mCategory;
     private Context mContext;
@@ -51,9 +52,9 @@ class FeedAdapter extends PagedListAdapter<Feed, FeedAdapter.ViewHolder> {
         return item.itemType;
     }
 
-    @NonNull
+
     @Override
-    public FeedAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    protected ViewHolder onCreateViewHolder2(ViewGroup parent, int viewType) {
         ViewDataBinding binding;
         if (viewType == Feed.TYPE_IMAGE) {
             binding = LayoutFeedTypeImageBinding.inflate(mInflater, parent, false);
@@ -64,7 +65,7 @@ class FeedAdapter extends PagedListAdapter<Feed, FeedAdapter.ViewHolder> {
     }
 
     @Override
-    public void onBindViewHolder(@NonNull FeedAdapter.ViewHolder holder, int position) {
+    protected void onBindViewHolder2(ViewHolder holder, int position) {
         Feed item = getItem(position);
         holder.bindData(item);
         holder.itemView.setOnClickListener(new View.OnClickListener() {

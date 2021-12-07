@@ -24,6 +24,7 @@ import com.github.crayonxiaoxin.libnetwork.ApiService;
 import com.github.crayonxiaoxin.libnetwork.JsonCallback;
 import com.github.crayonxiaoxin.ppjoke.model.Comment;
 import com.github.crayonxiaoxin.ppjoke.model.Feed;
+import com.github.crayonxiaoxin.ppjoke.model.TagList;
 import com.github.crayonxiaoxin.ppjoke.model.User;
 import com.github.crayonxiaoxin.ppjoke.ui.login.UserManager;
 
@@ -40,6 +41,7 @@ public class InteractionPresenter {
     public static final String URL_TOGGLE_FEED_FAVORITE = "/ugc/toggleFavorite";
     public static final String URL_TOGGLE_USER_FOLLOW = "/ugc/toggleUserFollow";
     public static final String URL_DELETE_COMMENT = "/comment/deleteComment";
+    public static final String URL_TOGGLE_TAG_FOLLOW = "/tag/toggleTagFollow";
 
     public static void toggleFeedLiked(LifecycleOwner owner, Feed feed) {
         if (!UserManager.get().isLogin()) {
@@ -301,6 +303,47 @@ public class InteractionPresenter {
                             try {
                                 boolean result = response.body.getBooleanValue("result");
                                 liveData.postValue(result);
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void onError(ApiResponse<JSONObject> response) {
+                        showToast(response.message);
+                    }
+                });
+    }
+
+    public static void toggleTagLiked(LifecycleOwner owner, TagList tagList) {
+        if (!UserManager.get().isLogin()) {
+            LiveData<User> loginLiveData = UserManager.get().login(AppGlobals.getApplication());
+            loginLiveData.observe(owner, new Observer<User>() {
+                @Override
+                public void onChanged(User user) {
+                    if (user != null) {
+                        toggleTagLiked(tagList);
+                    }
+                    loginLiveData.removeObserver(this);
+                }
+            });
+            return;
+        }
+        toggleTagLiked(tagList);
+    }
+
+    private static void toggleTagLiked(TagList tagList) {
+        ApiService.get(URL_TOGGLE_TAG_FOLLOW)
+                .addParam("userId", UserManager.get().getUserId())
+                .addParam("tagId", tagList.tagId)
+                .execute(new JsonCallback<JSONObject>() {
+                    @Override
+                    public void onSuccess(ApiResponse<JSONObject> response) {
+                        if (response.body != null) {
+                            try {
+                                boolean hasFollowed = response.body.getBooleanValue("hasFollow");
+                                tagList.setHasFollowed(hasFollowed);
                             } catch (JSONException e) {
                                 e.printStackTrace();
                             }

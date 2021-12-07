@@ -33,13 +33,13 @@ import java.util.Map;
 public class SofaFragment extends Fragment {
 
 
-    private FragmentSofaBinding binding;
-    private TabLayout tabLayout;
-    private ViewPager2 viewPager;
-    private ArrayList<SofaTab.Tab> tabs;
-    private SofaTab tabConfig;
-    private Map<Integer, Fragment> fragmentMap = new HashMap<>();
-    private TabLayoutMediator tabLayoutMediator;
+    protected FragmentSofaBinding binding;
+    protected TabLayout tabLayout;
+    protected ViewPager2 viewPager;
+    protected ArrayList<SofaTab.Tab> tabs;
+    protected SofaTab tabConfig;
+    protected Map<Integer, Fragment> fragmentMap = new HashMap<>();
+    protected TabLayoutMediator tabLayoutMediator;
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         Log.e("SofaFragment", "onCreateView: ");
@@ -51,7 +51,7 @@ public class SofaFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         viewPager = binding.viewPager;
         tabLayout = binding.tabLayout;
-        tabConfig = AppConfig.getSofaTabConfig();
+        tabConfig = getTabConfig();
         tabs = new ArrayList<>();
         for (SofaTab.Tab tab : tabConfig.tabs) {
             if (tab.enable) {
@@ -121,7 +121,7 @@ public class SofaFragment extends Fragment {
         return tabView;
     }
 
-    private Fragment createTabFragment(int position) {
+    protected Fragment createTabFragment(int position) {
         Fragment fragment = fragmentMap.get(position);
         if (fragment == null) {
             fragment = getTabFragment(position);
@@ -129,8 +129,12 @@ public class SofaFragment extends Fragment {
         return fragment;
     }
 
-    private Fragment getTabFragment(int position) {
+    protected Fragment getTabFragment(int position) {
         return HomeFragment.newInstance(tabs.get(position).tag);
+    }
+
+    protected SofaTab getTabConfig(){
+        return AppConfig.getSofaTabConfig();
     }
 
     @Override
