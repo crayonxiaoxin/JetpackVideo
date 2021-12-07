@@ -43,7 +43,7 @@ public class ViewZoomBehavior extends CoordinatorLayout.Behavior<FullScreenPlaye
 
     @Override
     public boolean onLayoutChild(@NonNull CoordinatorLayout parent, @NonNull FullScreenPlayerView child, int layoutDirection) {
-        if (viewDragHelper == null ) {
+        if (viewDragHelper == null) {
             viewDragHelper = ViewDragHelper.create(parent, 1.0f, mCallback);
             scrollingView = parent.findViewById(scrollingId);
             refChild = (FullScreenPlayerView) child;
@@ -147,7 +147,6 @@ public class ViewZoomBehavior extends CoordinatorLayout.Behavior<FullScreenPlaye
             Log.e("TAG", "onTouchEvent: 1");
             return super.onTouchEvent(parent, child, ev);
         }
-        Log.e("TAG", "onTouchEvent: 2 "+child.getClass());
         viewDragHelper.processTouchEvent(ev);
         return true;
     }
@@ -155,12 +154,13 @@ public class ViewZoomBehavior extends CoordinatorLayout.Behavior<FullScreenPlaye
     @Override
     public boolean onInterceptTouchEvent(@NonNull CoordinatorLayout parent, @NonNull FullScreenPlayerView child, @NonNull MotionEvent ev) {
         if (!canFullscreen || viewDragHelper == null) {
-            Log.e("TAG", "onInterceptTouchEvent: 1");
             return super.onInterceptTouchEvent(parent, child, ev);
         }
-        Log.e("TAG", "onInterceptTouchEvent: 2");
-        viewDragHelper.shouldInterceptTouchEvent(ev);
-        return true;
+        // 教程中的 错误方式，这种方式会 导致所有事件被拦截
+//        viewDragHelper.shouldInterceptTouchEvent(ev)
+//        return true;
+        // 应该返回 viewDragHelper tryCaptureView 的结果
+        return viewDragHelper.shouldInterceptTouchEvent(ev);
     }
 
     public void setOnViewZoomCallback(ViewZoomCallback callback) {

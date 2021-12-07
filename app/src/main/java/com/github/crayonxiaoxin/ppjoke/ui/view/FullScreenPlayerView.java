@@ -1,6 +1,7 @@
 package com.github.crayonxiaoxin.ppjoke.ui.view;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.util.Log;
@@ -51,11 +52,13 @@ public class FullScreenPlayerView extends ListPlayerView {
         } else {
             int maxWidth = PixUtils.getScreenWidth();
             int maxHeight = PixUtils.getScreenHeight();
+            Log.e("TAG", "setSize: maxWidth=" + maxWidth + ", maxHeight=" + maxHeight);
 
             ViewGroup.LayoutParams layoutParams = getLayoutParams();
             layoutParams.width = maxWidth;
             layoutParams.height = maxHeight;
             setLayoutParams(layoutParams);
+            setBackgroundColor(Color.BLUE);
 
             FrameLayout.LayoutParams coverParams = (LayoutParams) cover.getLayoutParams();
             coverParams.width = (int) (widthPx / (heightPx * 1.0f / maxHeight));

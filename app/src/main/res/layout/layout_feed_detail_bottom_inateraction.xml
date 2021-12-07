@@ -54,7 +54,7 @@
                 android:layout_marginRight="@dimen/dp_16"
                 android:layout_marginBottom="@dimen/dp_4"
                 android:layout_weight="4"
-                android:background="@drawable/bg_edit_view"
+                android:background="@{fullscreen?@drawable/bg_edit_view2:@drawable/bg_edit_view}"
                 android:gravity="center_vertical"
                 android:hint="@string/feed_detil_hint"
                 android:paddingLeft="@dimen/dp_10"

@@ -14,6 +14,13 @@
         <package android:name="com.tencent.tim" />
     </queries>
 
+    <supports-screens
+        android:anyDensity="true"
+        android:largeScreens="true"
+        android:normalScreens="true"
+        android:resizeable="true"
+        android:smallScreens="true" />
+
     <application
         android:name=".JokeApplication"
         android:allowBackup="true"

@@ -10,6 +10,7 @@ import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.FragmentActivity;
 
+import com.github.crayonxiaoxin.libcommon.utils.PixUtils;
 import com.github.crayonxiaoxin.ppjoke.R;
 import com.github.crayonxiaoxin.ppjoke.databinding.ActivityFeedDetailTypeVideoBinding;
 import com.github.crayonxiaoxin.ppjoke.databinding.LayoutFeedDetailTypeVideoHeaderBinding;
@@ -81,6 +82,7 @@ public class VideoViewHandler extends ViewHandler {
                 Log.e("TAG", "onDragZoom: fullscreen = " + fullscreen);
                 Log.e("TAG", "onDragZoom: height = " + mVideoBinding.playerView.getBottom());
                 Log.e("TAG", "onDragZoom: coordinator bottom = " + coordinator.getBottom());
+                Log.e("TAG", "bindInitData: " + PixUtils.getScreenHeight()+" , " + mVideoBinding.getRoot().getBottom());
             }
         });
 
