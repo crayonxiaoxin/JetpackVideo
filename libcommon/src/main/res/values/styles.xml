@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <declare-styleable name="viewOutlineStrategy">
-        <attr name="radius" format="dimension" />
-        <attr name="radiusSide" format="enum">
+        <attr name="clipRadius" format="dimension" />
+        <attr name="clipSide" format="enum">
             <enum name="all" value="0" />
             <enum name="left" value="1" />
             <enum name="top" value="2" />

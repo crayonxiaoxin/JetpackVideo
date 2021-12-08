@@ -19,8 +19,8 @@ public class ViewHelper {
 
     public static void setViewOutline(View view, @Nullable AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         TypedArray typedArray = view.getContext().obtainStyledAttributes(attrs, R.styleable.viewOutlineStrategy);
-        int radius = typedArray.getDimensionPixelOffset(R.styleable.viewOutlineStrategy_radius, 0);
-        int radiusSide = typedArray.getIndex(R.styleable.viewOutlineStrategy_radiusSide);
+        int radius = typedArray.getDimensionPixelOffset(R.styleable.viewOutlineStrategy_clipRadius, 0);
+        int radiusSide = typedArray.getIndex(R.styleable.viewOutlineStrategy_clipSide);
         typedArray.recycle();
 
         setViewOutline(view, radius, radiusSide);
@@ -31,8 +31,8 @@ public class ViewHelper {
         view.setOutlineProvider(new ViewOutlineProvider() {
             @Override
             public void getOutline(View view, Outline outline) {
-                int width = view.getWidth();
-                int height = view.getHeight();
+                int width = view.getMeasuredWidth();
+                int height = view.getMeasuredHeight();
                 if (width <= 0 || height <= 0) return;
                 if (radiusSide != RADIUS_ALL) {
                     int left = 0, right = width, top = 0, bottom = height;
@@ -41,9 +41,9 @@ public class ViewHelper {
                     } else if (radiusSide == RADIUS_TOP) {
                         bottom += radius;
                     } else if (radiusSide == RADIUS_RIGHT) {
-                        left += radius;
+                        left -= radius;
                     } else if (radiusSide == RADIUS_BOTTOM) {
-                        top += radius;
+                        top -= radius;
                     }
                     outline.setRoundRect(left, top, right, bottom, radius);
                 } else {

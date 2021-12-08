@@ -357,6 +357,46 @@ public class InteractionPresenter {
                 });
     }
 
+    public static LiveData<Boolean> deleteFeed(Context context, long itemId) {
+        MutableLiveData<Boolean> liveData = new MutableLiveData<>();
+        new AlertDialog.Builder(context)
+                .setNegativeButton("删除", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        dialogInterface.dismiss();
+                        deleteFeedInternal(liveData, itemId);
+                    }
+                })
+                .setPositiveButton("取消", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        dialogInterface.dismiss();
+                    }
+                })
+                .setMessage("确定要删除这条帖子吗？").create().show();
+        return liveData;
+    }
+
+    private static void deleteFeedInternal(MutableLiveData<Boolean> liveData, long itemId) {
+        ApiService.get("/feeds/deleteFeed")
+                .addParam("itemId", itemId)
+                .execute(new JsonCallback<JSONObject>() {
+                    @Override
+                    public void onSuccess(ApiResponse<JSONObject> response) {
+                        if (response.body != null) {
+                            boolean result = response.body.getBooleanValue("result");
+                            liveData.postValue(result);
+                            showToast("删除成功");
+                        }
+                    }
+
+                    @Override
+                    public void onError(ApiResponse<JSONObject> response) {
+                        showToast(response.message);
+                    }
+                });
+    }
+
     @SuppressLint("RestrictedApi")
     public static void showToast(String message) {
         ArchTaskExecutor.getMainThreadExecutor().execute(new Runnable() {
@@ -366,4 +406,5 @@ public class InteractionPresenter {
             }
         });
     }
+
 }

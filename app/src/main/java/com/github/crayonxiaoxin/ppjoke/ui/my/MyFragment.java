@@ -62,6 +62,24 @@ public class MyFragment extends Fragment {
                         .create().show();
             }
         });
+        mBinding.goDetail.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ProfileActivity.startActivity(getContext(), ProfileActivity.TAB_TYPE_ALL);
+            }
+        });
+        mBinding.userComment.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ProfileActivity.startActivity(getContext(), ProfileActivity.TAB_TYPE_COMMENT);
+            }
+        });
+        mBinding.userFeed.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ProfileActivity.startActivity(getContext(), ProfileActivity.TAB_TYPE_FEED);
+            }
+        });
     }
 
     @Override

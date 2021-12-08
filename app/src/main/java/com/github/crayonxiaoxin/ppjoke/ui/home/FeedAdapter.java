@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
+import androidx.databinding.DataBindingUtil;
 import androidx.databinding.ViewDataBinding;
 import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.Observer;
@@ -17,6 +18,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.github.crayonxiaoxin.libcommon.extension.AbsPagedListAdapter;
 import com.github.crayonxiaoxin.libcommon.extension.LiveDataBus;
 import com.github.crayonxiaoxin.ppjoke.BR;
+import com.github.crayonxiaoxin.ppjoke.R;
 import com.github.crayonxiaoxin.ppjoke.databinding.LayoutFeedTypeImageBinding;
 import com.github.crayonxiaoxin.ppjoke.databinding.LayoutFeedTypeVideoBinding;
 import com.github.crayonxiaoxin.ppjoke.model.Feed;
@@ -25,9 +27,9 @@ import com.github.crayonxiaoxin.ppjoke.ui.detail.FeedDetailActivity;
 import com.github.crayonxiaoxin.ppjoke.ui.view.ListPlayerView;
 
 public class FeedAdapter extends AbsPagedListAdapter<Feed, FeedAdapter.ViewHolder> {
-    private final LayoutInflater mInflater;
-    private String mCategory;
-    private Context mContext;
+    protected final LayoutInflater mInflater;
+    protected String mCategory;
+    protected Context mContext;
 
     protected FeedAdapter(Context context, String category) {
         super(new DiffUtil.ItemCallback<Feed>() {
@@ -49,17 +51,18 @@ public class FeedAdapter extends AbsPagedListAdapter<Feed, FeedAdapter.ViewHolde
     @Override
     protected int getItemViewType2(int position) {
         Feed item = getItem(position);
-        return item.itemType;
+        if (item == null) return 0;
+        if (item.itemType == Feed.TYPE_IMAGE) {
+            return R.layout.layout_feed_type_image;
+        } else if (item.itemType == Feed.TYPE_VIDEO) {
+            return R.layout.layout_feed_type_video;
+        }
+        return 0;
     }
 
     @Override
     protected ViewHolder onCreateViewHolder2(ViewGroup parent, int viewType) {
-        ViewDataBinding binding;
-        if (viewType == Feed.TYPE_IMAGE) {
-            binding = LayoutFeedTypeImageBinding.inflate(mInflater, parent, false);
-        } else {
-            binding = LayoutFeedTypeVideoBinding.inflate(mInflater, parent, false);
-        }
+        ViewDataBinding binding = DataBindingUtil.inflate(mInflater, viewType, parent, false);
         return new ViewHolder(binding.getRoot(), binding);
     }
 
@@ -123,14 +126,10 @@ public class FeedAdapter extends AbsPagedListAdapter<Feed, FeedAdapter.ViewHolde
             mBinding.setVariable(BR.lifeCycleOwner, mContext);
             if (mBinding instanceof LayoutFeedTypeImageBinding) {
                 LayoutFeedTypeImageBinding imageBinding = (LayoutFeedTypeImageBinding) mBinding;
-//                imageBinding.setFeed(item);
                 imageBinding.feedImage.bindData(item.width, item.height, 16, item.cover);
-//                imageBinding.setLifecycleOwner((LifecycleOwner) mContext); // include 中的 variable 不传递
-            } else {
+            } else if (mBinding instanceof LayoutFeedTypeVideoBinding) {
                 LayoutFeedTypeVideoBinding videoBinding = (LayoutFeedTypeVideoBinding) mBinding;
-//                videoBinding.setFeed(item);
                 videoBinding.listPlayerView.bindData(mCategory, item.width, item.height, item.cover, item.url);
-//                videoBinding.setLifecycleOwner((LifecycleOwner) mContext);
                 listPlayerView = videoBinding.listPlayerView;
             }
         }
