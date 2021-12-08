@@ -1,11 +1,18 @@
 package com.github.crayonxiaoxin.ppjoke.ui.login;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
+import android.widget.Toast;
 
+import androidx.arch.core.executor.ArchTaskExecutor;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
+import com.github.crayonxiaoxin.libcommon.global.AppGlobals;
+import com.github.crayonxiaoxin.libnetwork.ApiResponse;
+import com.github.crayonxiaoxin.libnetwork.ApiService;
+import com.github.crayonxiaoxin.libnetwork.JsonCallback;
 import com.github.crayonxiaoxin.libnetwork.cache.CacheManager;
 import com.github.crayonxiaoxin.ppjoke.model.User;
 
@@ -52,5 +59,41 @@ public class UserManager {
 
     public long getUserId() {
         return isLogin() ? mUser.userId : 0;
+    }
+
+    public LiveData<User> refresh() {
+        if (!isLogin()) {
+            return login(AppGlobals.getApplication());
+        }
+        MutableLiveData<User> liveData = new MutableLiveData<>();
+        ApiService.get("/user/query")
+                .addParam("userId", getUserId())
+                .execute(new JsonCallback<User>() {
+                    @Override
+                    public void onSuccess(ApiResponse<User> response) {
+                        if (response.body != null) {
+                            save(response.body);
+                            liveData.postValue(response.body);
+                        }
+                    }
+
+                    @SuppressLint("RestrictedApi")
+                    @Override
+                    public void onError(ApiResponse<User> response) {
+                        ArchTaskExecutor.getMainThreadExecutor().execute(new Runnable() {
+                            @Override
+                            public void run() {
+                                Toast.makeText(AppGlobals.getApplication(), response.message, Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                        liveData.postValue(null);
+                    }
+                });
+        return liveData;
+    }
+
+    public void logout() {
+        CacheManager.deleteCache(KEY_CACHE_USER, mUser);
+        mUser = null;
     }
 }

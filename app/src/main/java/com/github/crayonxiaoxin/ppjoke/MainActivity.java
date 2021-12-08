@@ -9,6 +9,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.navigation.NavController;
+import androidx.navigation.NavDestination;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.navigation.ui.NavigationUI;
 
@@ -73,4 +74,14 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
         return TextUtils.isEmpty(item.getTitle());
     }
 
+    @Override
+    public void onBackPressed() {
+        int currentDestination = navController.getCurrentDestination().getId();
+        int startDestination = navController.getGraph().getStartDestination();
+        if (currentDestination != startDestination) {
+            navView.setSelectedItemId(startDestination);
+        } else {
+            finish();
+        }
+    }
 }

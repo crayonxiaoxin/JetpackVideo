@@ -57,4 +57,11 @@ public class CacheManager {
         }
         return bytes;
     }
+
+    public static <T> void deleteCache(String keyCacheUser, T cache) {
+        Cache cache1 = new Cache();
+        cache1.key = keyCacheUser;
+        cache1.data = toByteArray(cache);
+        CacheDatabase.get().getCacheDao().delete(cache1);
+    }
 }
