@@ -47,11 +47,10 @@ public class FeedAdapter extends AbsPagedListAdapter<Feed, FeedAdapter.ViewHolde
     }
 
     @Override
-    public int getItemViewType(int position) {
+    protected int getItemViewType2(int position) {
         Feed item = getItem(position);
         return item.itemType;
     }
-
 
     @Override
     protected ViewHolder onCreateViewHolder2(ViewGroup parent, int viewType) {

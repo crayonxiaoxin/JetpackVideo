@@ -3,6 +3,8 @@ package com.github.crayonxiaoxin.ppjoke.model;
 import androidx.databinding.BaseObservable;
 import androidx.databinding.Bindable;
 
+import com.github.crayonxiaoxin.ppjoke.BR;
+
 import java.io.Serializable;
 import java.util.Objects;
 
@@ -39,5 +41,6 @@ public class TagList extends BaseObservable implements Serializable {
 
     public void setHasFollowed(boolean hasFollowed) {
         this.hasFollow = hasFollowed;
+        notifyPropertyChanged(BR._all);
     }
 }

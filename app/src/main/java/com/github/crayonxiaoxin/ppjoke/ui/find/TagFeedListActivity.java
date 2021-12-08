@@ -2,6 +2,8 @@ package com.github.crayonxiaoxin.ppjoke.ui.find;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.view.LayoutInflater;
@@ -18,7 +20,9 @@ import androidx.paging.PagedListAdapter;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.github.crayonxiaoxin.libcommon.extension.AbsPagedListAdapter;
 import com.github.crayonxiaoxin.libcommon.utils.PixUtils;
+import com.github.crayonxiaoxin.libcommon.utils.StatusBar;
 import com.github.crayonxiaoxin.libcommon.view.EmptyView;
 import com.github.crayonxiaoxin.ppjoke.R;
 import com.github.crayonxiaoxin.ppjoke.databinding.ActivityTagFeedListBinding;
@@ -45,7 +49,7 @@ public class TagFeedListActivity extends AppCompatActivity implements View.OnCli
     private PageListPlayDetector playDetector;
     private boolean shouldPause = true;
     private LayoutTagFeedListHeaderBinding headerBinding;
-    private FeedAdapter adapter;
+    private AbsPagedListAdapter adapter;
     private int totalScrollY = 0;
     private TagFeedListViewModel tagFeedListViewModel;
 
@@ -57,6 +61,7 @@ public class TagFeedListActivity extends AppCompatActivity implements View.OnCli
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
+        StatusBar.fitSystemBar(this);
         super.onCreate(savedInstanceState);
         mBinding = DataBindingUtil.setContentView(this, R.layout.activity_tag_feed_list);
         recyclerView = mBinding.refreshLayoutView.recyclerView;
@@ -70,7 +75,7 @@ public class TagFeedListActivity extends AppCompatActivity implements View.OnCli
         mBinding.setTagList(tagList);
 
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        adapter = getAdapter();
+        adapter = (AbsPagedListAdapter) getAdapter();
         recyclerView.setAdapter(adapter);
         playDetector = new PageListPlayDetector(this, recyclerView);
 
@@ -125,29 +130,31 @@ public class TagFeedListActivity extends AppCompatActivity implements View.OnCli
                     mBinding.tagTitle.setVisibility(View.VISIBLE);
                     mBinding.topBarFollow.setVisibility(View.VISIBLE);
                     mBinding.actionBack.setImageResource(R.drawable.icon_back_black);
+                    mBinding.topBar.setBackgroundColor(Color.WHITE);
+                    mBinding.topLine.setVisibility(View.VISIBLE);
                 } else {
                     mBinding.tagLogo.setVisibility(View.GONE);
                     mBinding.tagTitle.setVisibility(View.GONE);
                     mBinding.topBarFollow.setVisibility(View.GONE);
                     mBinding.actionBack.setImageResource(R.drawable.icon_back_white);
+                    mBinding.topBar.setBackground(new ColorDrawable(Color.TRANSPARENT));
+                    mBinding.topLine.setVisibility(View.GONE);
                 }
             }
         });
     }
 
-    public FeedAdapter getAdapter() {
+    public PagedListAdapter getAdapter() {
         return new FeedAdapter(this, KEY_FEED_TYPE) {
             @Override
-            public void onViewAttachedToWindow(@NonNull ViewHolder holder) {
-                super.onViewAttachedToWindow(holder);
+            public void onViewAttachedToWindow2(@NonNull ViewHolder holder) {
                 if (holder.isVideoItem()) {
                     playDetector.addTarget(holder.getListPlayerView());
                 }
             }
 
             @Override
-            public void onViewDetachedFromWindow(@NonNull ViewHolder holder) {
-                super.onViewDetachedFromWindow(holder);
+            public void onViewDetachedFromWindow2(@NonNull ViewHolder holder) {
                 if (holder.isVideoItem()) {
                     playDetector.removeTarget(holder.getListPlayerView());
                 }

@@ -45,6 +45,11 @@ public class FeedCommentAdapter extends AbsPagedListAdapter<Comment, FeedComment
     }
 
     @Override
+    protected int getItemViewType2(int position) {
+        return getItem(position).commentType;
+    }
+
+    @Override
     protected FeedCommentAdapter.ViewHolder onCreateViewHolder2(ViewGroup parent, int viewType) {
         LayoutFeedCommentListItemBinding binding = LayoutFeedCommentListItemBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false);
         return new ViewHolder(binding.getRoot(), binding);

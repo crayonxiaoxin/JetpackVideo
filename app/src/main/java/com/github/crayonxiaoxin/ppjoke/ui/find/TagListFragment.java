@@ -52,11 +52,6 @@ public class TagListFragment extends AbsListFragment<TagList, TagListViewModel> 
 
     @Override
     public void onLoadMore(@NonNull RefreshLayout refreshLayout) {
-        mViewModel.getDataSource().invalidate();
-    }
-
-    @Override
-    public void onRefresh(@NonNull RefreshLayout refreshLayout) {
         PagedList<TagList> currentList = adapter.getCurrentList();
         long tagId = currentList == null ? 0 : currentList.get(currentList.size() - 1).tagId;
         mViewModel.loadData(tagId, new ItemKeyedDataSource.LoadCallback<TagList>() {
@@ -69,13 +64,20 @@ public class TagListFragment extends AbsListFragment<TagList, TagListViewModel> 
                         return tagList.tagId;
                     }
                 };
-                mutableItemKeyedDataSource.data.addAll(currentList);
-                mutableItemKeyedDataSource.data.addAll(list);
-                PagedList<TagList> tagLists = mutableItemKeyedDataSource.buildNewPagedList(currentList.getConfig());
-                if (tagLists.size() > 0) {
-                    submitList(tagLists);
+                if (currentList != null) {
+                    mutableItemKeyedDataSource.data.addAll(currentList);
+                    mutableItemKeyedDataSource.data.addAll(list);
+                    PagedList<TagList> tagLists = mutableItemKeyedDataSource.buildNewPagedList(currentList.getConfig());
+                    if (tagLists.size() > 0) {
+                        submitList(tagLists);
+                    }
                 }
             }
         });
+    }
+
+    @Override
+    public void onRefresh(@NonNull RefreshLayout refreshLayout) {
+        mViewModel.getDataSource().invalidate();
     }
 }

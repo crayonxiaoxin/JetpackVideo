@@ -36,6 +36,11 @@ public class TagListAdapter extends AbsPagedListAdapter<TagList, TagListAdapter.
     }
 
     @Override
+    protected int getItemViewType2(int position) {
+        return 0;
+    }
+
+    @Override
     protected ViewHolder onCreateViewHolder2(ViewGroup parent, int viewType) {
         LayoutTagListItemBinding binding = LayoutTagListItemBinding.inflate(mInflater, parent, false);
         return new ViewHolder(binding);
@@ -49,6 +54,12 @@ public class TagListAdapter extends AbsPagedListAdapter<TagList, TagListAdapter.
             @Override
             public void onClick(View v) {
                 InteractionPresenter.toggleTagLiked((LifecycleOwner) mContext, item);
+            }
+        });
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                TagFeedListActivity.startActivity(mContext, item);
             }
         });
     }

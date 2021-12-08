@@ -1,6 +1,7 @@
 package com.github.crayonxiaoxin.ppjoke.ui.find;
 
 import android.annotation.SuppressLint;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.arch.core.executor.ArchTaskExecutor;
@@ -60,12 +61,12 @@ public class TagListViewModel extends AbsViewModal<TagList> {
         @NonNull
         @Override
         public Long getKey(@NonNull TagList tagList) {
-            return tagList.tagId;
+            return (Long) tagList.tagId;
         }
 
         @Override
         public void loadAfter(@NonNull LoadParams<Long> loadParams, @NonNull LoadCallback<TagList> loadCallback) {
-            loadData(loadParams.key, loadCallback);
+            loadData((Long) loadParams.key, loadCallback);
         }
 
         private void loadData(Long key, LoadCallback<TagList> loadCallback) {
@@ -99,7 +100,7 @@ public class TagListViewModel extends AbsViewModal<TagList> {
 
         @Override
         public void loadInitial(@NonNull LoadInitialParams<Long> loadInitialParams, @NonNull LoadInitialCallback<TagList> loadInitialCallback) {
-            loadData(loadInitialParams.requestedInitialKey, loadInitialCallback);
+            loadData(0L, loadInitialCallback);
         }
     }
 }

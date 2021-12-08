@@ -71,7 +71,11 @@ public abstract class AbsPagedListAdapter<T, VH extends RecyclerView.ViewHolder>
             return mFooters.keyAt(position);
         }
         position = position - mHeaders.size();
-        return super.getItemViewType(position);
+        return getItemViewType2(position);
+    }
+
+    protected int getItemViewType2(int position){
+        return 0;
     }
 
     private boolean isHeaderPosition(int position) {
@@ -114,6 +118,29 @@ public abstract class AbsPagedListAdapter<T, VH extends RecyclerView.ViewHolder>
     @Override
     public void registerAdapterDataObserver(@NonNull RecyclerView.AdapterDataObserver observer) {
         super.registerAdapterDataObserver(new AdapterDataObserverProxy(observer));
+    }
+
+    @Override
+    public void onViewAttachedToWindow(@NonNull VH holder) {
+        int bindingAdapterPosition = holder.getBindingAdapterPosition();
+        if (!isHeaderPosition(bindingAdapterPosition)&&!isFooterPosition(bindingAdapterPosition)){
+            this.onViewAttachedToWindow2(holder);
+        }
+    }
+    public void onViewAttachedToWindow2(@NonNull VH holder) {
+
+    }
+
+    @Override
+    public void onViewDetachedFromWindow(@NonNull VH holder) {
+        int bindingAdapterPosition = holder.getBindingAdapterPosition();
+        if (!isHeaderPosition(bindingAdapterPosition)&&!isFooterPosition(bindingAdapterPosition)){
+            this.onViewDetachedFromWindow2(holder);
+        }
+    }
+
+    public void onViewDetachedFromWindow2(VH holder) {
+
     }
 
     // paging 的坑：如果在网络加载之前添加 header，paging 会找不到正确的位置

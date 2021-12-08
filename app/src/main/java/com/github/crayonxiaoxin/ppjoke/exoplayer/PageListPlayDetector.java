@@ -37,9 +37,7 @@ public class PageListPlayDetector {
                     playingTarget = null;
                     mTargets.clear();
                     recyclerView.removeCallbacks(delayAutoPlay);
-                    if (recyclerView.getAdapter() != null) {
-                        recyclerView.getAdapter().unregisterAdapterDataObserver(mDataObserver);
-                    }
+                    recyclerView.removeOnScrollListener(scrollListener);
                     lifecycleOwner.getLifecycle().removeObserver(this);
                 }
             }
@@ -47,29 +45,31 @@ public class PageListPlayDetector {
         if (recyclerView.getAdapter() != null) {
             recyclerView.getAdapter().registerAdapterDataObserver(mDataObserver);
         }
-        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
-            @Override
-            public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
-                if (newState == RecyclerView.SCROLL_STATE_IDLE) {
-                    autoPlay();
-                }
-            }
-
-            @Override
-            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
-                if (dx == 0 && dy == 0) {
-                    //时序问题。当执行了AdapterDataObserver#onItemRangeInserted  可能还没有被布局到RecyclerView上。
-                    //所以此时 recyclerView.getChildCount()还是等于0的。
-                    //等 childView 被布局到RecyclerView上之后，会执行onScrolled（）方法
-                    postAutoPlay();
-                } else {
-                    if (playingTarget != null && playingTarget.isPlaying() && !isTargetInBounds(playingTarget)) {
-                        playingTarget.inActive();
-                    }
-                }
-            }
-        });
+        recyclerView.addOnScrollListener(scrollListener);
     }
+
+    RecyclerView.OnScrollListener scrollListener = new RecyclerView.OnScrollListener() {
+        @Override
+        public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
+            if (newState == RecyclerView.SCROLL_STATE_IDLE) {
+                autoPlay();
+            }
+        }
+
+        @Override
+        public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+            if (dx == 0 && dy == 0) {
+                //时序问题。当执行了AdapterDataObserver#onItemRangeInserted  可能还没有被布局到RecyclerView上。
+                //所以此时 recyclerView.getChildCount()还是等于0的。
+                //等 childView 被布局到RecyclerView上之后，会执行onScrolled（）方法
+                postAutoPlay();
+            } else {
+                if (playingTarget != null && playingTarget.isPlaying() && !isTargetInBounds(playingTarget)) {
+                    playingTarget.inActive();
+                }
+            }
+        }
+    };
 
     private void postAutoPlay() {
         // View.post 保证 runnable 在 view 的 attachedToWindow 和 detachedToWindow 期间调用
