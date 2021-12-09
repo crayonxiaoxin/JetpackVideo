@@ -19,7 +19,7 @@ import com.github.crayonxiaoxin.ppjoke.model.User;
 public class UserManager {
 
     public static final String KEY_CACHE_USER = "cache_user";
-    private MutableLiveData<User> userLiveData = new MutableLiveData<>();
+    private MutableLiveData<User> userLiveData;
     private static UserManager userManager = new UserManager();
     private User mUser;
 
@@ -29,16 +29,23 @@ public class UserManager {
 
     public UserManager() {
         User cache = (User) CacheManager.getCache(KEY_CACHE_USER);
-        if (cache != null && cache.expiresTime < System.currentTimeMillis()) {
+        if (cache != null) {
             mUser = cache;
         }
+    }
+
+    public MutableLiveData<User> getUserLiveData(){
+        if (userLiveData==null){
+            userLiveData = new MutableLiveData<>();
+        }
+        return userLiveData;
     }
 
     public void save(User user) {
         mUser = user;
         CacheManager.save(KEY_CACHE_USER, user);
-        if (userLiveData.hasObservers()) {
-            userLiveData.postValue(user);
+        if (getUserLiveData().hasObservers()) {
+            getUserLiveData().postValue(user);
         }
     }
 
@@ -46,7 +53,7 @@ public class UserManager {
         Intent intent = new Intent(context, LoginActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         context.startActivity(intent);
-        return userLiveData;
+        return getUserLiveData();
     }
 
     public boolean isLogin() {
@@ -95,5 +102,6 @@ public class UserManager {
     public void logout() {
         CacheManager.deleteCache(KEY_CACHE_USER, mUser);
         mUser = null;
+        userLiveData = null;
     }
 }

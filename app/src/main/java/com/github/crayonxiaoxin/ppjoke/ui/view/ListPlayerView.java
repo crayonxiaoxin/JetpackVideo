@@ -175,12 +175,12 @@ public class ListPlayerView extends FrameLayout implements IPlayTarget, PlayerCo
             MediaSource mediaSource = PageListPlayManager.createMediaSource(mVideoUrl);
             exoPlayer.setMediaSource(mediaSource);
             exoPlayer.prepare();
-            exoPlayer.setRepeatMode(Player.REPEAT_MODE_ONE); // 重复播放这一个
             pageListPlay.playUrl = mVideoUrl; // 这里之前没有赋值，导致每次都进入else分支，每次播放都重头开始
         }
         controllerView.show();
         controllerView.addVisibilityListener(this); // 播放按钮跟随 controller 隐藏/显示
 
+        exoPlayer.setRepeatMode(Player.REPEAT_MODE_ONE); // 重复播放这一个，每次播放都重新开启 loop，因为暂停的时候关闭了
         exoPlayer.addListener(this);
         exoPlayer.setPlayWhenReady(true);
     }
@@ -201,6 +201,7 @@ public class ListPlayerView extends FrameLayout implements IPlayTarget, PlayerCo
         ExoPlayer exoPlayer = pageListPlay.exoPlayer;
         PlayerControlView controllerView = pageListPlay.controllerView;
         if (exoPlayer == null || controllerView == null) return;
+        exoPlayer.setRepeatMode(Player.REPEAT_MODE_OFF); // 一定要关闭，否则导致 OOM
         exoPlayer.setPlayWhenReady(false);
         exoPlayer.removeListener(this); // 不移除的话，当一个item player状态改变时，所有item的状态都会改变
         controllerView.removeVisibilityListener(this); // 不移除的话，当controller出现时，所有item的play都会出现
@@ -222,12 +223,12 @@ public class ListPlayerView extends FrameLayout implements IPlayTarget, PlayerCo
 
     @Override
     public void onPlayerStateChanged(boolean playWhenReady, int playbackState) {
-        Log.e("TAG", "onPlayerStateChanged: " + playWhenReady + " " + playbackState);
+//        Log.e("TAG", "onPlayerStateChanged: " + playWhenReady + " " + playbackState);
         PageListPlay pageListPlay = PageListPlayManager.get(mCategory);
         ExoPlayer exoPlayer = pageListPlay.exoPlayer;
         if (playbackState == Player.STATE_READY && exoPlayer.getBufferedPosition() != 0 && playWhenReady) {
             cover.setVisibility(GONE);
-            Log.e("TAG", "onPlayerStateChanged: " + (cover.getVisibility() == GONE));
+//            Log.e("TAG", "onPlayerStateChanged: " + (cover.getVisibility() == GONE));
             bufferView.setVisibility(GONE);
         } else if (playbackState == Player.STATE_BUFFERING) {
             bufferView.setVisibility(VISIBLE);

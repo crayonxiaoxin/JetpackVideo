@@ -91,7 +91,7 @@ public abstract class Request<T, R extends Request> implements Cloneable {
                 public void run() {
                     ApiResponse<T> response = readCache();
                     if (callback != null && response != null && response.body != null) {
-                        Log.e("TAG", "run: " + response.status);
+//                        Log.e("TAG", "run: " + response.status);
                         callback.cacheSuccess(response);
                     }
                 }

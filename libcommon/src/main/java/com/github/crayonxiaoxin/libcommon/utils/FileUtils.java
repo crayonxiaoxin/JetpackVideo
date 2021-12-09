@@ -84,7 +84,7 @@ public class FileUtils {
                     try {
                         file.createNewFile();
                         fos = new FileOutputStream(file);
-                        Log.e("TAG", "run: bytes " + bytes.length);
+//                        Log.e("TAG", "run: bytes " + bytes.length);
                         fos.write(bytes);
 
                         MediaScannerConnection.scanFile(context, new String[]{file.getParent()}, new String[]{"image/jpeg"}, null);

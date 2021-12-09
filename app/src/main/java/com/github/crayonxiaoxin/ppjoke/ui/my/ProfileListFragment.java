@@ -1,6 +1,8 @@
 package com.github.crayonxiaoxin.ppjoke.ui.my;
 
 import android.os.Bundle;
+import android.text.TextUtils;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.Observer;
@@ -29,12 +31,6 @@ public class ProfileListFragment extends AbsListFragment<Feed, ProfileViewModel>
     @Override
     protected void afterCreateView() {
         mViewModel.setProfileType(tabType);
-        mViewModel.getPageData().observe(getViewLifecycleOwner(), new Observer<PagedList<Feed>>() {
-            @Override
-            public void onChanged(PagedList<Feed> feeds) {
-                submitList(feeds);
-            }
-        });
         playDetector = new PageListPlayDetector(getViewLifecycleOwner(), mRecyclerView);
         binding.refreshLayout.setEnableRefresh(false);
     }
@@ -77,8 +73,14 @@ public class ProfileListFragment extends AbsListFragment<Feed, ProfileViewModel>
     @Override
     public void onResume() {
         super.onResume();
+        shouldPause = true;
         if (playDetector != null) {
-            playDetector.onResume();
+            // 评论页是没有视频的
+            if (TextUtils.equals(tabType, ProfileActivity.TAB_TYPE_COMMENT)) {
+                playDetector.onPause();
+            } else {
+                playDetector.onResume();
+            }
         }
     }
 
@@ -91,8 +93,19 @@ public class ProfileListFragment extends AbsListFragment<Feed, ProfileViewModel>
     }
 
     @Override
-    public void onDestroy() {
+    public void onDestroyView() {
+        Log.e("TAG", "onDestroyView: " + tabType);
         PageListPlayManager.release(tabType);
-        super.onDestroy();
+        super.onDestroyView();
+    }
+
+    @Override
+    public void onHiddenChanged(boolean hidden) {
+        super.onHiddenChanged(hidden);
+        if (hidden) {
+            playDetector.onPause();
+        } else {
+            playDetector.onResume();
+        }
     }
 }

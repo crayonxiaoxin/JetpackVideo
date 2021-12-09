@@ -130,12 +130,12 @@ public class FullScreenPlayerView extends ListPlayerView {
             MediaSource mediaSource = PageListPlayManager.createMediaSource(mVideoUrl);
             exoPlayer.setMediaSource(mediaSource);
             exoPlayer.prepare();
-            exoPlayer.setRepeatMode(Player.REPEAT_MODE_ONE); // 重复播放这一个
             pageListPlay.playUrl = mVideoUrl; // 这里之前没有赋值，导致每次都进入else分支，每次播放都重头开始
         }
         controllerView.show();
         controllerView.addVisibilityListener(this); // 播放按钮跟随 controller 隐藏/显示
 
+        exoPlayer.setRepeatMode(Player.REPEAT_MODE_ONE); // 重复播放这一个
         exoPlayer.addListener(this);
         exoPlayer.setPlayWhenReady(true);
     }

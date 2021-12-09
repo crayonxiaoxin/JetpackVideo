@@ -21,7 +21,9 @@ public class PageListPlayDetector {
     private IPlayTarget playingTarget;
 
     public void addTarget(IPlayTarget target) {
-        mTargets.add(target);
+        if (!mTargets.contains(target)) {
+            mTargets.add(target);
+        }
     }
 
     public void removeTarget(IPlayTarget target) {

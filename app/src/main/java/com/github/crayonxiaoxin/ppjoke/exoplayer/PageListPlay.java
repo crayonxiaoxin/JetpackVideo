@@ -25,7 +25,7 @@ public class PageListPlay {
         exoPlayer = new ExoPlayer.Builder(application)
                 .setRenderersFactory(new DefaultRenderersFactory(application))
                 .setTrackSelector(new DefaultTrackSelector())
-                .setLoadControl(new DefaultLoadControl())
+                .setLoadControl(new DefaultLoadControl.Builder().setPrioritizeTimeOverSizeThresholds(false).build())
                 .build();
         playerView = (PlayerView) LayoutInflater.from(application).inflate(R.layout.layout_exo_player_view, null, false);
         controllerView = (PlayerControlView) LayoutInflater.from(application).inflate(R.layout.layout_exo_player_controller_view, null, false);

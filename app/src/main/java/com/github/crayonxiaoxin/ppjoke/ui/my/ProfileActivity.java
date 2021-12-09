@@ -58,17 +58,6 @@ public class ProfileActivity extends AppCompatActivity {
 
         String[] tabs = getResources().getStringArray(R.array.profile_tabs);
 
-
-        int initTabPosition = getInitTabPosition();
-        if (initTabPosition != 0) {
-            viewPager.post(new Runnable() {
-                @Override
-                public void run() {
-                    viewPager.setCurrentItem(initTabPosition);
-                }
-            });
-        }
-
         viewPager.setAdapter(new FragmentStateAdapter(this) {
             @NonNull
             @Override
@@ -93,6 +82,16 @@ public class ProfileActivity extends AppCompatActivity {
                 return tabs.length;
             }
         });
+
+        int initTabPosition = getInitTabPosition();
+        if (initTabPosition != 0) {
+            viewPager.post(new Runnable() {
+                @Override
+                public void run() {
+                    viewPager.setCurrentItem(initTabPosition);
+                }
+            });
+        }
 
         // autoRefresh: 当调用 notifyChanged 是否移除再重新添加，即是否调用 onConfigureTab
         new TabLayoutMediator(tabLayout, viewPager, false, new TabLayoutMediator.TabConfigurationStrategy() {
