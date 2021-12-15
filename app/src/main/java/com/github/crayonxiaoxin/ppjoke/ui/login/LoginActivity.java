@@ -2,6 +2,8 @@ package com.github.crayonxiaoxin.ppjoke.ui.login;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
@@ -11,8 +13,10 @@ import com.github.crayonxiaoxin.libcommon.global.AppGlobals;
 import com.github.crayonxiaoxin.libnetwork.ApiResponse;
 import com.github.crayonxiaoxin.libnetwork.ApiService;
 import com.github.crayonxiaoxin.libnetwork.JsonCallback;
+import com.github.crayonxiaoxin.ppjoke.R;
 import com.github.crayonxiaoxin.ppjoke.databinding.ActivityLayoutLoginBinding;
 import com.github.crayonxiaoxin.ppjoke.model.User;
+import com.google.android.material.button.MaterialButton;
 import com.tencent.connect.UserInfo;
 import com.tencent.connect.auth.QQToken;
 import com.tencent.connect.common.Constants;
@@ -37,6 +41,12 @@ public class LoginActivity extends AppCompatActivity {
 
         binding.actionClose.setOnClickListener(view -> close());
         binding.actionLogin.setOnClickListener(view -> loginByQQ());
+
+//        setContentView(R.layout.activity_layout_login);
+//        ImageView actionClose = findViewById(R.id.action_close);
+//        MaterialButton actionLogin = findViewById(R.id.action_login);
+//        actionClose.setOnClickListener(view -> close());
+//        actionLogin.setOnClickListener(view -> loginByQQ());
     }
 
     public void close() {

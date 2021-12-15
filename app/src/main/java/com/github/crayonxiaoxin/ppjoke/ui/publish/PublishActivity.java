@@ -49,7 +49,7 @@ import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
-@ActivityDestination(pageUrl = "main/tabs/publish")
+@ActivityDestination(pageUrl = "main/tabs/publish", needLogin = true)
 public class PublishActivity extends AppCompatActivity implements View.OnClickListener {
     private ActivityPublishBinding mBinding;
     private Uri fileUri;

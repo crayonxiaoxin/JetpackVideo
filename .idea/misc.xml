@@ -8,6 +8,7 @@
         <entry key="../../.gradle/caches/transforms-3/1c87a1993ad5020daf55bfffa2fba516/transformed/jetified-exoplayer-ui-2.16.0/res/layout/exo_player_view.xml" value="0.196875" />
         <entry key="app/src/main/res/drawable/bg_edit_view.xml" value="0.27037037037037037" />
         <entry key="app/src/main/res/drawable/bg_edit_view2.xml" value="0.27037037037037037" />
+        <entry key="app/src/main/res/drawable/ic_home_black_24dp.xml" value="0.22552083333333334" />
         <entry key="app/src/main/res/drawable/list_divider.xml" value="0.18802083333333333" />
         <entry key="app/src/main/res/drawable/splash.xml" value="0.2740740740740741" />
         <entry key="app/src/main/res/layout/activity_capture.xml" value="0.19739583333333333" />
@@ -19,6 +20,7 @@
         <entry key="app/src/main/res/layout/activity_profile.xml" value="0.1859375" />
         <entry key="app/src/main/res/layout/activity_publish.xml" value="0.25" />
         <entry key="app/src/main/res/layout/activity_tag_feed_list.xml" value="0.18072916666666666" />
+        <entry key="app/src/main/res/layout/activity_test.xml" value="0.1802536231884058" />
         <entry key="app/src/main/res/layout/fragment_dashboard.xml" value="0.13858695652173914" />
         <entry key="app/src/main/res/layout/fragment_find.xml" value="0.1466565349544073" />
         <entry key="app/src/main/res/layout/fragment_home.xml" value="0.15896739130434784" />
