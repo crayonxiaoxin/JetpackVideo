@@ -18,9 +18,9 @@ public class ViewHelper {
     public static final int RADIUS_BOTTOM = 4;
 
     public static void setViewOutline(View view, @Nullable AttributeSet attrs, int defStyleAttr, int defStyleRes) {
-        TypedArray typedArray = view.getContext().obtainStyledAttributes(attrs, R.styleable.viewOutlineStrategy);
+        TypedArray typedArray = view.getContext().obtainStyledAttributes(attrs, R.styleable.viewOutlineStrategy, defStyleAttr, defStyleRes);
         int radius = typedArray.getDimensionPixelOffset(R.styleable.viewOutlineStrategy_clipRadius, 0);
-        int radiusSide = typedArray.getIndex(R.styleable.viewOutlineStrategy_clipSide);
+        int radiusSide = typedArray.getInt(R.styleable.viewOutlineStrategy_clipSide, RADIUS_ALL);
         typedArray.recycle();
 
         setViewOutline(view, radius, radiusSide);
