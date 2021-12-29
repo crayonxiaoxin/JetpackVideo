@@ -61,6 +61,7 @@ public class PageListPlayManager {
         PageListPlay pageListPlay = sPageListPlayHashMap.get(pageName);
         if (pageListPlay != null) {
             sPageListPlayHashMap.remove(pageName);
+            pageListPlay.release(); // 修复oom
         }
     }
 }
