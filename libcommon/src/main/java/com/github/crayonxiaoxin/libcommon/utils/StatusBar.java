@@ -33,7 +33,18 @@ public class StatusBar {
         Window window = activity.getWindow();
         View decorView = window.getDecorView();
         // false 状态栏覆盖在 fitSystemBar 之上，true 不会覆盖
-        WindowCompat.setDecorFitsSystemWindows(window, decorFitsSystemWindows);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            WindowCompat.setDecorFitsSystemWindows(window, decorFitsSystemWindows);
+        } else {
+            // 修复 WindowCompat.setDecorFitsSystemWindows 切换导致界面跳动的问题
+            // api<30 会添加 flag： SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION（问题的根源）
+            final int decorFitsFlags = View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                    | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN;
+            final int sysUiVis = decorView.getSystemUiVisibility();
+            decorView.setSystemUiVisibility(decorFitsSystemWindows
+                    ? sysUiVis & ~decorFitsFlags
+                    : sysUiVis | decorFitsFlags);
+        }
         // 绘制 statusBar 透明色
         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
         window.setStatusBarColor(Color.TRANSPARENT);
@@ -49,7 +60,8 @@ public class StatusBar {
                     window.setAttributes(layoutParams);
                 }
             }
-        }else{
+        } else {
+            // 修复 api<30 无法切换 亮色或暗色 状态栏的问题
             int visibility = decorView.getSystemUiVisibility();
             if (darkIcons) {
                 visibility |= View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR;

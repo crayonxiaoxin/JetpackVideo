@@ -33,7 +33,7 @@ import com.github.crayonxiaoxin.ppjoke.ui.login.UserManager;
 import java.util.ArrayList;
 import java.util.List;
 
-@FragmentDestination(pageUrl = "main/tabs/my", needLogin = true)
+@FragmentDestination(pageUrl = "main/tabs/my", needLogin = false)
 public class MyFragment extends Fragment {
 
     private FragmentMyBinding mBinding;
