@@ -58,6 +58,7 @@ public abstract class Request<T, R extends Request> implements Cloneable {
     public R addParam(String key, Object value) {
         if (value == null) value = "";
         params.put(key, value);
+        Log.e("TAG", "addParam: " + this);
         return (R) this;
     }
 
@@ -85,6 +86,7 @@ public abstract class Request<T, R extends Request> implements Cloneable {
     // 异步
     @SuppressLint("RestrictedApi")
     public void execute(JsonCallback<T> callback) {
+        Log.e("TAG", "execute: " + this);
         if (mCacheStrategy != NET_ONLY) {
             ArchTaskExecutor.getIOThreadExecutor().execute(new Runnable() {
                 @Override
